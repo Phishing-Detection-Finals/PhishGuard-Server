@@ -11,11 +11,16 @@ class AuthenticationController:
         self.register_routes()
 
     def register_routes(self):
-        self.blueprint.route('/helloworld', methods=['GET'])(self.get_questions)
+        self.blueprint.route('/login', methods=['GET'])(self.login)
+        self.blueprint.route('/signup', methods=['GET'])(self.signup)
 
-    def get_questions(self):
+    def login(self):
 
-        return jsonify({"hello": "helloworld"}), 200  # noqa501
+        return jsonify({"login": "helloworld"}), 200
+
+    def signup(self):
+
+        return jsonify({"signup": "helloWorld"}), 200
 
     def as_blueprint(self):
         return self.blueprint
