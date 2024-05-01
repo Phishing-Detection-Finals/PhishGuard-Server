@@ -8,6 +8,10 @@ class Constants:
 
     SUCCESSFULLY_LOGIN_MESSAGE = "{user_email}, connected successfully"
 
+    SUCCESSFULLY_DELETED_USER_MESSAGE = "user deleted successfully."
+
+    SUCCESSFULLY_UPDATED_USERNAME_MESSAGE = "username updated successfully, new username - {username}"
+
     JWT_TOKEN_EXPIRED_MESSAGE = "Token expired."
 
     JWT_TOKEN_INVALID_MESSAGE = "Invalid Token."
@@ -20,7 +24,11 @@ class Constants:
 
     AUTHENTICATION_ROUTE_PREFIX = "/auth"
 
+    USER_SETTING_ROUTE_PREFIX = "/setting"
+
     CREATED_STATUS_CODE = 201
+
+    OK_STATUS_CODE = 200
 
     CONFLICT_STATUS_CODE = 409
 

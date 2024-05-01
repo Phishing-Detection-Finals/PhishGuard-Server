@@ -1,5 +1,6 @@
 from ..data.user import User
 from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
+from ..exceptions.user_not_exists_exception import UserNotExistsException
 
 
 class UserCRUD():
@@ -22,3 +23,20 @@ class UserCRUD():
         if user:
             return True
         return False
+
+    @staticmethod
+    def delete_user(user_email: str) -> None:
+        user = User.objects(email=user_email).first()
+        if user:
+            user.delete()
+            return
+        raise UserNotExistsException
+
+    @staticmethod
+    def update_username(user_email: str, new_username: str) -> None:
+        user = User.objects(email=user_email).first()
+        if user:
+            user.usermame = new_username
+            user.save()
+            return
+        raise UserNotExistsException

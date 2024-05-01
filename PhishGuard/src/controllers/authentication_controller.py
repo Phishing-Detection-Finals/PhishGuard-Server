@@ -27,7 +27,7 @@ class AuthenticationController:
 
     def login(self):
         try:
-            return jsonify(UserService().login_user(user_json=request.json)), 200
+            return jsonify(UserService().login_user(user_json=request.json)), Constants.OK_STATUS_CODE
         except WrongPasswordsOrEmail as e:
             return jsonify({"error": str(e)}), Constants.UNAUTHORIZED_STATUS_CODE
         except Exception as e:
@@ -55,7 +55,7 @@ class AuthenticationController:
     def refresh_access_token(self):
         identity = get_jwt_identity()
 
-        return jsonify(UserService.refresh_user_access(identity))
+        return jsonify(UserService().refresh_user_access(identity)), Constants.OK_STATUS_CODE
 
     def as_blueprint(self):
         return self.blueprint

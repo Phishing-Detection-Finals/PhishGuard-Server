@@ -1,5 +1,6 @@
 from flask import Flask
 from .src.controllers.authentication_controller import AuthenticationController
+from .src.controllers.user_setting_controller import UserSettingController
 from dotenv import load_dotenv
 import os
 from flask_jwt_extended import JWTManager
@@ -43,6 +44,7 @@ def register_request_handlers(app: Flask):
 
 def connect_blueprints(app: Flask):
     app.register_blueprint(AuthenticationController().as_blueprint())
+    app.register_blueprint(UserSettingController().as_blueprint())
 
 
 if __name__ == '__main__':

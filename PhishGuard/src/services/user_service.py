@@ -2,12 +2,14 @@ from ..dal.user_crud import UserCRUD
 from ..exceptions.user_already_exists_exception import UserAlreadyExistsException
 from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
 from ..utils.user_utils import UsersUtils
+from ..constants import Constants
 
 
 class UserService():
     def __init__(self) -> None:
         pass
 
+    # TODO implement validation of all of the data
     def get_user_by_email(self, email: str):
         UserCRUD.get_user_by_email(email=email).to_dict()
 
@@ -26,5 +28,16 @@ class UserService():
             return UsersUtils.generate_jwt_tokens_and_login_message(user=user)
         raise WrongPasswordsOrEmail()
 
-    def refresh_user_access(identity: str) -> dict:
+    def refresh_user_access(self, identity: str) -> dict:
         return UsersUtils.generate_tokens_dict(access_token=UsersUtils.generate_jwt_access_token(user_email=identity))
+
+    def delete_user(self, user_email: str) -> dict:
+        UserCRUD.delete_user(user_email=user_email)
+        return {"message": Constants.SUCCESSFULLY_DELETED_USER_MESSAGE}
+
+    def update_username(self, user_email: str, payload_data: dict):
+        # TODO add checks for None username and other validation
+
+        new_username = payload_data.get("username")
+        UserCRUD.update_username(user_email, new_username)
+        return {"message": Constants.SUCCESSFULLY_UPDATED_USERNAME_MESSAGE.format(username=new_username)}
