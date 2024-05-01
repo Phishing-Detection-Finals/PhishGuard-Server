@@ -1,6 +1,7 @@
 from mongoengine import EmailField, StringField, ObjectIdField, Document
 from bson import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
+from ..constants import Constants
 
 
 class User(Document):
@@ -8,6 +9,7 @@ class User(Document):
     username = StringField(required=True)
     email = EmailField(required=True, unique=True)
     password_hash = StringField(required=True)
+    meta = {'collection': Constants.USERS_MONGODB_COLLECTION_NAME}
 
     def set_hash_password(self, password: str):
         self.password_hash = generate_password_hash(password)

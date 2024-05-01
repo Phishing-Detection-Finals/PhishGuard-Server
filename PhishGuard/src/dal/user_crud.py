@@ -1,15 +1,15 @@
 from ..data.user import User
-from ..exceptions.user_not_exists_exception import UserNotExistsException
+from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
 
 
 class UserCRUD():
 
     @staticmethod
-    def get_user_by_email(email: str) -> dict:
+    def get_user_by_email(email: str) -> User:
         user = User.objects(email=email).first()
         if user:
-            return user.to_dict()
-        raise UserNotExistsException(email)
+            return user
+        raise WrongPasswordsOrEmail()
 
     @staticmethod
     def create_user(user: User) -> dict:
