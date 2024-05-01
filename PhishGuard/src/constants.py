@@ -8,6 +8,12 @@ class Constants:
 
     SUCCESSFULLY_LOGIN_MESSAGE = "{user_email}, connected successfully"
 
+    JWT_TOKEN_EXPIRED_MESSAGE = "Token expired."
+
+    JWT_TOKEN_INVALID_MESSAGE = "Invalid Token."
+
+    JWT_TOKEN_MISSING_MESSAGE = "Token Missing."
+
     MONGODB_DB_NAME = "PhishGuard"
 
     USERS_MONGODB_COLLECTION_NAME = "Users"
@@ -19,5 +25,7 @@ class Constants:
     CONFLICT_STATUS_CODE = 409
 
     UNAUTHORIZED_STATUS_CODE = 401
+
+    FORBIDDEN_STATUS_CODE = 403
 
     INTERNAL_ERROR = 500

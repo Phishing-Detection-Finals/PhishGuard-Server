@@ -1,7 +1,7 @@
 from ..dal.user_crud import UserCRUD
 from ..exceptions.user_already_exists_exception import UserAlreadyExistsException
 from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
-from ..user_utils import UsersUtils
+from ..utils.user_utils import UsersUtils
 
 
 class UserService():
@@ -25,3 +25,6 @@ class UserService():
         if user.check_password_hash(password=user_json.get("password")):
             return UsersUtils.generate_jwt_tokens_and_login_message(user=user)
         raise WrongPasswordsOrEmail()
+
+    def refresh_user_access(identity: str) -> dict:
+        return UsersUtils.generate_tokens_dict(access_token=UsersUtils.generate_jwt_access_token(user_email=identity))

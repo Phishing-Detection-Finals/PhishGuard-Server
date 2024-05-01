@@ -1,6 +1,6 @@
-from .data.user import User
+from ..data.user import User
 from flask_jwt_extended import create_access_token, create_refresh_token
-from .constants import Constants
+from ..constants import Constants
 
 
 class UsersUtils():
@@ -15,23 +15,38 @@ class UsersUtils():
 
     @staticmethod
     def generate_jwt_tokens_and_login_message(user: User) -> dict:
-        access_token, refresh_token = UsersUtils.generate_jwt_tokens(user_email=user.email)
+        access_token, refresh_token = UsersUtils.generate_jwt_access_and_refresh_tokens(user_email=user.email)
         formatted_message = Constants.SUCCESSFULLY_LOGIN_MESSAGE.format(user_email=user.email)
         return UsersUtils.generate_message_with_tokens(message=formatted_message, access_token=access_token,
                                                        refresh_token=refresh_token)
 
     @staticmethod
-    def generate_jwt_tokens(user_email: str) -> tuple[str, str]:
-        access_token = create_access_token(identity=user_email)
-        refresh_token = create_refresh_token(identity=user_email)
+    def generate_jwt_access_and_refresh_tokens(user_email: str) -> tuple[str, str]:
+        access_token = UsersUtils.generate_jwt_access_token(user_email=user_email)
+        refresh_token = UsersUtils.generate_jwt_refresh_token(user_email=user_email)
         return access_token, refresh_token
+
+    @staticmethod
+    def generate_jwt_access_token(user_email: str) -> dict:
+        return create_access_token(identity=user_email)
+
+    @staticmethod
+    def generate_jwt_refresh_token(user_email: str) -> str:
+        return create_refresh_token(identity=user_email)
 
     @staticmethod
     def generate_message_with_tokens(message: str, access_token: str, refresh_token: str) -> dict:
         return {
             "message": message,
-            "tokens": {
+            "tokens": UsersUtils.generate_tokens_dict(access_token=access_token, refresh_token=refresh_token)
+        }
+
+    @staticmethod
+    def generate_tokens_dict(access_token: str = None, refresh_token: str = None):
+        tokens = {
+            key: value for key, value in {
                 "access_token": access_token,
                 "refresh_token": refresh_token
-            }
+            }.items() if value is not None
         }
+        return tokens

@@ -3,6 +3,7 @@ from .src.controllers.authentication_controller import AuthenticationController
 from dotenv import load_dotenv
 import os
 from flask_jwt_extended import JWTManager
+from .src.utils.jwt_utils import JWTUtils
 load_dotenv()
 from .src.db.phishguard_db_connection import PhishGuardDBConnection  # noqa 402
 
@@ -20,6 +21,10 @@ def create_app():
     register_request_handlers(app)
 
     connect_blueprints(app=app)
+
+    # register jwt errors handler
+    JWTUtils.register_jwt_error_handlers(jwt=jwt)
+
     return app
 
 
