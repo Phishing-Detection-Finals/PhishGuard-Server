@@ -15,7 +15,7 @@ class UserCRUD():
     @staticmethod
     def create_user(user: User) -> dict:
         user.save()
-        return {"user_id": str(user._id)}
+        return {"user_email": str(user.email)}
 
     @staticmethod
     def is_user_with_email_exists(email: str) -> bool:

@@ -20,6 +20,8 @@ class Constants:
 
     MONGODB_DB_NAME = "PhishGuard"
 
+    MONGODB_DB_TEST_NAME = "TEST-PhishGuard"
+
     USERS_MONGODB_COLLECTION_NAME = "Users"
 
     AUTHENTICATION_ROUTE_PREFIX = "/auth"
