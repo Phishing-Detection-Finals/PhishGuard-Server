@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..constants import Constants
+from http import HTTPStatus
 from ..services.user_service import UserService
 from ..exceptions.user_already_exists_exception import UserAlreadyExistsException
 from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
@@ -27,22 +28,22 @@ class AuthenticationController:
 
     def login(self):
         try:
-            return jsonify(UserService().login_user(user_json=request.json)), Constants.OK_STATUS_CODE
+            return jsonify(UserService().login_user(user_json=request.json)), HTTPStatus.OK
         except WrongPasswordsOrEmail as e:
-            return jsonify({"error": str(e)}), Constants.UNAUTHORIZED_STATUS_CODE
+            return jsonify({"error": str(e)}), HTTPStatus.UNAUTHORIZED
         except Exception as e:
-            return jsonify({"error": str(e)}), Constants.INTERNAL_ERROR
+            return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
     def signup(self):
         try:
             new_user_data = UserService().signup_user(user_json=request.json)
-            return jsonify(new_user_data), Constants.CREATED_STATUS_CODE
+            return jsonify(new_user_data), HTTPStatus.CREATED
 
         except UserAlreadyExistsException as e:
-            return jsonify({"error": str(e)}), Constants.CONFLICT_STATUS_CODE
+            return jsonify({"error": str(e)}), HTTPStatus.CONFLICT
 
         except Exception as e:
-            return jsonify({"error": str(e)}), Constants.INTERNAL_ERROR
+            return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
     # TODO delete - used for testing jwt token
     # @jwt_required()
@@ -55,7 +56,7 @@ class AuthenticationController:
     def refresh_access_token(self):
         identity = get_jwt_identity()
 
-        return jsonify(UserService().refresh_user_access(identity)), Constants.OK_STATUS_CODE
+        return jsonify(UserService().refresh_user_access(identity)), HTTPStatus.OK
 
     def as_blueprint(self):
         return self.blueprint

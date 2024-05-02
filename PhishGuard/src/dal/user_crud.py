@@ -1,5 +1,5 @@
 from ..data.user import User
-from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
+# from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
 from ..exceptions.user_not_exists_exception import UserNotExistsException
 
 
@@ -10,7 +10,7 @@ class UserCRUD():
         user = User.objects(email=email).first()
         if user:
             return user
-        raise WrongPasswordsOrEmail()
+        raise UserNotExistsException
 
     @staticmethod
     def create_user(user: User) -> dict:
@@ -36,7 +36,7 @@ class UserCRUD():
     def update_username(user_email: str, new_username: str) -> None:
         user = User.objects(email=user_email).first()
         if user:
-            user.usermame = new_username
+            user.username = new_username
             user.save()
             return
         raise UserNotExistsException

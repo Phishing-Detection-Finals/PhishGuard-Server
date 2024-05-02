@@ -1,6 +1,7 @@
 from flask_jwt_extended import JWTManager
 from flask import jsonify
 from ..constants import Constants
+from http import HTTPStatus
 
 
 class JWTUtils():
@@ -10,15 +11,15 @@ class JWTUtils():
         # jwt error handlers
         @jwt.expired_token_loader
         def expired_token_callback(jwt_header, jwt_data):
-            return jsonify({"message": Constants.JWT_TOKEN_EXPIRED_MESSAGE}), Constants.UNAUTHORIZED_STATUS_CODE
+            return jsonify({"message": Constants.JWT_TOKEN_EXPIRED_MESSAGE}), HTTPStatus.UNAUTHORIZED
 
         @jwt.invalid_token_loader
         def invalid_token_callback(error):
-            return jsonify({"message": Constants.JWT_TOKEN_INVALID_MESSAGE}), Constants.FORBIDDEN_STATUS_CODE
+            return jsonify({"message": Constants.JWT_TOKEN_INVALID_MESSAGE}), HTTPStatus.FORBIDDEN
 
         @jwt.unauthorized_loader
         def missing_token_callback(error):
-            return jsonify({"message": Constants.JWT_TOKEN_MISSING_MESSAGE}), Constants.UNAUTHORIZED_STATUS_CODE
+            return jsonify({"message": Constants.JWT_TOKEN_MISSING_MESSAGE}), HTTPStatus.UNAUTHORIZED
 
     # example of adding data to user's jwt
     # @staticmethod
