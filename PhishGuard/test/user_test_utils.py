@@ -1,6 +1,6 @@
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
-from PhishGuard.src.data.user import User
+# from PhishGuard.src.data.user import User
 from .test_constants import TestConstants
 
 
@@ -8,18 +8,23 @@ class UserTestUtils():
 
     @staticmethod
     def create_test_user(client: FlaskClient, test_user: dict) -> TestResponse:
-        return client.post(TestConstants.SIGNUP_ROUTE, json=test_user)
+        return client.post(TestConstants.SIGNUP_USER_ROUTE, json=test_user)
 
     @staticmethod
     def login_test_user(client: FlaskClient, test_user: dict) -> TestResponse:
-        return client.post(TestConstants.LOGIN_ROUTE, json=test_user)
+        return client.post(TestConstants.LOGIN_USER_ROUTE, json=test_user)
 
     @staticmethod
     def refresh_tokens_test_user(client: FlaskClient, test_user: dict) -> TestResponse:
-        return client.post(TestConstants.LOGIN_ROUTE, json=test_user)
+        return client.post(TestConstants.LOGIN_USER_ROUTE, json=test_user)
 
     @staticmethod
-    def generate_authorization_header(jwt_token: str):
+    def delete_test_user(client: FlaskClient, jwt_access_token: str) -> TestResponse:
+        return client.delete(TestConstants.DELETE_USER_ROUTE,
+                             headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
+
+    @staticmethod
+    def generate_authorization_header(jwt_token: str) -> dict:
         return {"Authorization": TestConstants.AUTH_HEADER_TEMPLATE.format(jwt_token=jwt_token)}
 
     # def dict_to_user(user_dict: dict) -> User:

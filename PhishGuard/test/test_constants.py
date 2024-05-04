@@ -1,6 +1,7 @@
 class TestConstants():
-    SIGNUP_ROUTE = '/auth/signup'
-    LOGIN_ROUTE = '/auth/login'
+    SIGNUP_USER_ROUTE = '/auth/signup'
+    LOGIN_USER_ROUTE = '/auth/login'
+    DELETE_USER_ROUTE = '/setting/user'
 
     TEST_USERNAME_1 = "test1"
     TEST_EMAIL_1 = "test1@gmail.com"
