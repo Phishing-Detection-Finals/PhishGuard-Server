@@ -6,6 +6,8 @@ class Constants:
         "?retryWrites=true&w=majority&appName=PhishGuard"
     )
 
+    MONGODB_UUID_REPRESENTATION = 'standard'
+
     SUCCESSFULLY_LOGIN_MESSAGE = "{user_email}, connected successfully"
 
     SUCCESSFULLY_DELETED_USER_MESSAGE = "user deleted successfully."

@@ -2,6 +2,7 @@ from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 # from PhishGuard.src.data.user import User
 from .test_constants import TestConstants
+from http import HTTPStatus
 
 
 class UserTestUtils():
@@ -15,13 +16,36 @@ class UserTestUtils():
         return client.post(TestConstants.LOGIN_USER_ROUTE, json=test_user)
 
     @staticmethod
-    def refresh_tokens_test_user(client: FlaskClient, test_user: dict) -> TestResponse:
-        return client.post(TestConstants.LOGIN_USER_ROUTE, json=test_user)
+    def refresh_tokens_test_user(client: FlaskClient, jwt_refresh_token: dict) -> TestResponse:
+        return client.get(TestConstants.REFRESH_USER_ACCESS_TOKEN_ROUTE,
+                          headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_refresh_token))
 
     @staticmethod
     def delete_test_user(client: FlaskClient, jwt_access_token: str) -> TestResponse:
         return client.delete(TestConstants.DELETE_USER_ROUTE,
                              headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
+
+    @staticmethod
+    def get_test_user_details(client: FlaskClient, jwt_access_token: str) -> TestResponse:
+        return client.get(TestConstants.GET_USER_ROUTE,
+                          headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
+
+    @staticmethod
+    def create_user_login_and_retrive_tokens(client: FlaskClient, test_user: dict):
+        response = UserTestUtils.create_test_user(client=client, test_user=test_user)
+        assert response.status_code == HTTPStatus.CREATED
+
+        response = UserTestUtils.login_test_user(client=client, test_user=test_user)
+        assert response.status_code == HTTPStatus.OK
+
+        tokens = response.get_json().get("tokens")
+        assert tokens and isinstance(tokens, dict)
+
+        access_token = tokens.get("access_token")
+        refresh_token = tokens.get("refresh_token")
+        assert access_token and refresh_token
+
+        return access_token, refresh_token
 
     @staticmethod
     def generate_authorization_header(jwt_token: str) -> dict:

@@ -10,7 +10,7 @@ class UserCRUD():
         user = User.objects(email=email).first()
         if user:
             return user
-        raise UserNotExistsException
+        raise UserNotExistsException(user_email=email)
 
     @staticmethod
     def create_user(user: User) -> dict:
@@ -30,7 +30,7 @@ class UserCRUD():
         if user:
             user.delete()
             return
-        raise UserNotExistsException
+        raise UserNotExistsException(user_email=user_email)
 
     @staticmethod
     def update_username(user_email: str, new_username: str) -> None:
@@ -39,4 +39,4 @@ class UserCRUD():
             user.username = new_username
             user.save()
             return
-        raise UserNotExistsException
+        raise UserNotExistsException(user_email=user_email)

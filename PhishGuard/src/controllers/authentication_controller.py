@@ -4,8 +4,8 @@ from ..constants import Constants
 from http import HTTPStatus
 from ..services.user_service import UserService
 from ..exceptions.user_already_exists_exception import UserAlreadyExistsException
-from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
-# from ..exceptions.user_not_exists_exception import UserNotExistsException
+from ..exceptions.wrong_password_exception import WrongPasswordException
+from ..exceptions.user_not_exists_exception import UserNotExistsException
 # from flask_jwt_extended import JWTManager
 # TODO continue handling jwt video number 4 - 9:00
 
@@ -29,8 +29,10 @@ class AuthenticationController:
     def login(self):
         try:
             return jsonify(UserService().login_user(user_json=request.json)), HTTPStatus.OK
-        except WrongPasswordsOrEmail as e:
+        except WrongPasswordException as e:
             return jsonify({"error": str(e)}), HTTPStatus.UNAUTHORIZED
+        except UserNotExistsException as e:
+            return jsonify({"error": str(e)}), HTTPStatus.NOT_FOUND
         except Exception as e:
             return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 

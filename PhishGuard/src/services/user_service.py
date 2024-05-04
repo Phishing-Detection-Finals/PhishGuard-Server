@@ -1,7 +1,7 @@
 from ..dal.user_crud import UserCRUD
 from ..exceptions.user_already_exists_exception import UserAlreadyExistsException
-from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
-from ..exceptions.user_not_exists_exception import UserNotExistsException
+from ..exceptions.wrong_password_exception import WrongPasswordException
+# from ..exceptions.user_not_exists_exception import UserNotExistsException
 from ..utils.user_utils import UsersUtils
 from ..constants import Constants
 
@@ -24,13 +24,10 @@ class UserService():
         return UserCRUD.create_user(user=user)
 
     def login_user(self, user_json: dict) -> dict:
-        try:
-            user = UserCRUD.get_user_by_email(email=user_json.get("email"))
-            if user.check_password_hash(password=user_json.get("password")):
-                return UsersUtils.generate_jwt_tokens_and_login_message(user=user)
-            raise WrongPasswordsOrEmail()
-        except UserNotExistsException:
-            raise WrongPasswordsOrEmail()
+        user = UserCRUD.get_user_by_email(email=user_json.get("email"))
+        if user.check_password_hash(password=user_json.get("password")):
+            return UsersUtils.generate_jwt_tokens_and_login_message(user=user)
+        raise WrongPasswordException()
 
     def refresh_user_access(self, identity: str) -> dict:
         return UsersUtils.generate_tokens_dict(access_token=UsersUtils.generate_jwt_access_token(user_email=identity))

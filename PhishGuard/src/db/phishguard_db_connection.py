@@ -15,10 +15,12 @@ class PhishGuardDBConnection:
         self.mongodb_uri = Constants.MONGODB_URI_TEMPLATE.format(username=mongodb_username, password=mongodb_password)
 
     def connect_to_db(self):
-        connect(host=self.mongodb_uri, db=Constants.MONGODB_DB_NAME)
+        connect(host=self.mongodb_uri, db=Constants.MONGODB_DB_NAME,
+                uuidRepresentation=Constants.MONGODB_UUID_REPRESENTATION)
 
     def connect_to_test_db(self):
-        connect(host=self.mongodb_uri, db=Constants.MONGODB_DB_TEST_NAME)
+        connect(host=self.mongodb_uri, db=Constants.MONGODB_DB_TEST_NAME,
+                uuidRepresentation=Constants.MONGODB_UUID_REPRESENTATION)
 
     def disconnect_from_db(self):
         disconnect()
