@@ -6,14 +6,12 @@ from ..services.user_service import UserService
 from ..exceptions.user_already_exists_exception import UserAlreadyExistsException
 from ..exceptions.wrong_password_exception import WrongPasswordException
 from ..exceptions.user_not_exists_exception import UserNotExistsException
-# from flask_jwt_extended import JWTManager
-# TODO continue handling jwt video number 4 - 9:00
+from email_validator import EmailNotValidError
 
 
 class AuthenticationController:
     def __init__(self):
         self.blueprint = Blueprint('authentication', __name__, url_prefix=Constants.AUTHENTICATION_ROUTE_PREFIX)
-        # self.jwt = JWTManager()
 
         # self.questions_service = QuestionsService()
 
@@ -29,10 +27,16 @@ class AuthenticationController:
     def login(self):
         try:
             return jsonify(UserService().login_user(user_json=request.json)), HTTPStatus.OK
+
         except WrongPasswordException as e:
             return jsonify({"error": str(e)}), HTTPStatus.UNAUTHORIZED
+
         except UserNotExistsException as e:
             return jsonify({"error": str(e)}), HTTPStatus.NOT_FOUND
+
+        except EmailNotValidError as e:
+            return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
+
         except Exception as e:
             return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -43,6 +47,9 @@ class AuthenticationController:
 
         except UserAlreadyExistsException as e:
             return jsonify({"error": str(e)}), HTTPStatus.CONFLICT
+
+        except EmailNotValidError as e:
+            return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
 
         except Exception as e:
             return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
