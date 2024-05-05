@@ -10,4 +10,5 @@ class Validator():
 
     @staticmethod
     def validate_email_to_normalized(email: str) -> str:
-        return validate_email(email).get("email")
+        valid_normalized = validate_email(email.lower(), check_deliverability=False)
+        return valid_normalized.normalized

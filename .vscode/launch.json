@@ -8,7 +8,8 @@
             "name": "Python Debugger: Module",
             "type": "debugpy",
             "request": "launch",
-            "module": "PhishGuard.__init__"
+            "module": "PhishGuard.__init__",
+            "justMyCode": false
         }
     ]
 }

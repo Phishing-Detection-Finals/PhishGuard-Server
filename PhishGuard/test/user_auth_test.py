@@ -79,3 +79,12 @@ def test_auth_jwt_required_with_no_header(client: FlaskClient):
     # deleting the user
     response = UserTestUtils.delete_test_user(client=client, jwt_access_token=access_token)
     assert response.status_code == HTTPStatus.OK
+
+
+@pytest.mark.parametrize("invalid_email", TestConstants.INVALID_EMAIL_LIST)
+def test_signup_invalid_email(client: FlaskClient, invalid_email: str):
+    # assigning invalid email to the user
+    user = TestConstants.TEST_USER_1
+    user["email"] = invalid_email
+    response = UserTestUtils.create_test_user(client=client, test_user=user)
+    assert response.status_code == HTTPStatus.BAD_REQUEST
