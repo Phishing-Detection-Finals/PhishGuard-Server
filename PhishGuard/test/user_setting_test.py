@@ -145,7 +145,7 @@ def test_update_username(client: FlaskClient):
     assert response.status_code == HTTPStatus.OK
 
     # getting username and checking for equal usernames
-    response_username = UserTestUtils.get_test_username(client=client, jwt_access_token=access_token) 
+    response_username = UserTestUtils.get_test_username(client=client, jwt_access_token=access_token)
 
     assert response_username == new_username
 
