@@ -53,6 +53,6 @@ class UsersUtils():
 
     @staticmethod
     def is_new_password_equals_to_old_password(user: User, new_password: str) -> bool:
-        if user.password_hash == User.get_password_hash(password=new_password):
+        if user.check_password_hash(password=new_password):
             return True
         return False

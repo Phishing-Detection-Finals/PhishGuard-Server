@@ -26,12 +26,27 @@ class UserTestUtils():
                              headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
 
     @staticmethod
+    def update_test_user_password(client: FlaskClient, jwt_access_token: str, new_password: str) -> TestResponse:
+        return client.put(TestConstants.UPDATE_PASSWORD_ROUTE, json={"password": new_password},
+                          headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
+
+    @staticmethod
+    def update_test_user_email(client: FlaskClient, jwt_access_token: str, new_email: str):
+        return client.put(TestConstants.UPDATE_EMAIL_ROUTE, json={"email": new_email},
+                          headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
+
+    @staticmethod
+    def update_test_user_username(client: FlaskClient, jwt_access_token: str, new_username: str):
+        return client.put(TestConstants.UPDATE_USERNAME_ROUTE, json={"username": new_username},
+                          headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
+
+    @staticmethod
     def get_test_user_details(client: FlaskClient, jwt_access_token: str) -> TestResponse:
         return client.get(TestConstants.GET_USER_ROUTE,
                           headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
 
     @staticmethod
-    def create_user_login_and_retrive_tokens(client: FlaskClient, test_user: dict):
+    def create_user_login_and_retrive_tokens(client: FlaskClient, test_user: dict) -> tuple[str, str]:
         response = UserTestUtils.create_test_user(client=client, test_user=test_user)
         assert response.status_code == HTTPStatus.CREATED
 
@@ -46,6 +61,13 @@ class UserTestUtils():
         assert access_token and refresh_token
 
         return access_token, refresh_token
+
+    @staticmethod
+    def get_test_username(client: FlaskClient, jwt_access_token: str) -> str:
+        response = UserTestUtils.get_test_user_details(client=client, jwt_access_token=jwt_access_token)
+        assert response.status_code == HTTPStatus.OK
+
+        return response.get_json().get("username")
 
     @staticmethod
     def generate_authorization_header(jwt_token: str) -> dict:
