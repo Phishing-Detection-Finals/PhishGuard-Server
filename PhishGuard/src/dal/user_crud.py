@@ -40,3 +40,21 @@ class UserCRUD():
             user.save()
             return
         raise UserNotExistsException(user_email=user_email)
+
+    @staticmethod
+    def update_email(user_email: str, new_email: str) -> None:
+        user = User.objects(email=user_email).first()
+        if user:
+            user.email = new_email
+            user.save()
+            return
+        raise UserNotExistsException(user_email=user_email)
+
+    @staticmethod
+    def update_password(user_email: str, new_password: str) -> None:
+        user = User.objects(email=user_email).first()
+        if user:
+            User.set_hash_password(self=user, password=new_password)
+            user.save()
+            return
+        raise UserNotExistsException(user_email=user_email)

@@ -14,6 +14,10 @@ class Constants:
 
     SUCCESSFULLY_UPDATED_USERNAME_MESSAGE = "username updated successfully, new username - {username}"
 
+    SUCCESSFULLY_UPDATED_EMAIL_MESSAGE = "email updated successfully, new email - {email}"
+
+    SUCCESSFULLY_UPDATED_PASSWORD_MESSAGE = "password updated successfully"
+
     JWT_TOKEN_EXPIRED_MESSAGE = "Token expired."
 
     JWT_TOKEN_INVALID_MESSAGE = "Invalid Token."
@@ -29,3 +33,5 @@ class Constants:
     AUTHENTICATION_ROUTE_PREFIX = "/auth"
 
     USER_SETTING_ROUTE_PREFIX = "/setting"
+
+    SPECIAL_CHARACTERS = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', ',', '.', '?', '"', ':', '{', '}', '|', '<', '>']

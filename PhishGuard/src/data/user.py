@@ -12,7 +12,11 @@ class User(Document):
     meta = {'collection': Constants.USERS_MONGODB_COLLECTION_NAME}
 
     def set_hash_password(self, password: str):
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = User.get_password_hash(password=password)
+
+    @staticmethod
+    def get_password_hash(password: str) -> str:
+        return generate_password_hash(password)
 
     def check_password_hash(self, password: str):
         return check_password_hash(pwhash=self.password_hash, password=password)

@@ -6,6 +6,9 @@ from ..services.user_service import UserService
 from ..exceptions.user_already_exists_exception import UserAlreadyExistsException
 from ..exceptions.wrong_password_exception import WrongPasswordException
 from ..exceptions.user_not_exists_exception import UserNotExistsException
+from ..exceptions.password_strength_exception import PasswordStrengthException
+from ..exceptions.username_not_valid_exception import UsernameNotValidException
+from ..exceptions.offensive_username_exception import OffensiveUsernameException
 from email_validator import EmailNotValidError
 
 
@@ -47,6 +50,15 @@ class AuthenticationController:
 
         except UserAlreadyExistsException as e:
             return jsonify({"error": str(e)}), HTTPStatus.CONFLICT
+
+        except PasswordStrengthException as e:
+            return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
+
+        except UsernameNotValidException as e:
+            return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
+
+        except OffensiveUsernameException as e:
+            return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
 
         except EmailNotValidError as e:
             return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST

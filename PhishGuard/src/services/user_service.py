@@ -1,6 +1,7 @@
 from ..dal.user_crud import UserCRUD
 from ..exceptions.user_already_exists_exception import UserAlreadyExistsException
 from ..exceptions.wrong_password_exception import WrongPasswordException
+from ..exceptions.previous_password_exception import PreviousPasswordException
 # from ..exceptions.user_not_exists_exception import UserNotExistsException
 from ..utils.user_utils import UsersUtils
 from ..validator import Validator
@@ -42,8 +43,21 @@ class UserService():
         UserCRUD.delete_user(user_email=identity)
         return {"message": Constants.SUCCESSFULLY_DELETED_USER_MESSAGE}
 
-    def update_username(self, identity: str, payload_data: dict):
-
-        new_username = payload_data.get("username")
-        UserCRUD.update_username(identity, new_username)
+    def update_username(self, identity: str, new_username: dict) -> dict:
+        Validator.validate_username(username=new_username)
+        UserCRUD.update_username(user_email=identity, new_username=new_username)
         return {"message": Constants.SUCCESSFULLY_UPDATED_USERNAME_MESSAGE.format(username=new_username)}
+
+    def update_email(identity: str, new_email: str) -> dict:
+        if UserCRUD.is_user_with_email_exists(email=new_email):
+            raise UserAlreadyExistsException(user_email=new_email)
+        new_email = Validator.validate_email_to_normalized(email=new_email)
+        UserCRUD.update_email(user_email=identity, new_email=new_email)
+        return {"message": Constants.SUCCESSFULLY_UPDATED_EMAIL_MESSAGE.format(email=new_email)}
+
+    def update_password(identity: str, new_password: str) -> dict:
+        user = UserCRUD.get_user_by_email(email=identity)
+        if UsersUtils.is_new_password_equals_to_old_password(user=user, new_password=new_password):
+            raise PreviousPasswordException()
+        UserCRUD.update_password(user_email=identity, new_password=new_password)
+        return {"message": Constants.SUCCESSFULLY_UPDATED_PASSWORD_MESSAGE}
