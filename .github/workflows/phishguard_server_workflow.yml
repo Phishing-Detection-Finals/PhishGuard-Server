@@ -47,9 +47,7 @@ jobs:
         cd ./$repo_name
         # pytest
         pip install pytest-cov
-        # (pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=$package_directory $package_directory/test/ | tee pytest-coverage.txt; test ${PIPESTATUS[0]} -eq 0)
-        # pytest --cov=$package_directory --cov-report=xml --cov-report=text > coverage.txt
-        pytest --cov=$package_directory --cov-report=term | tee coverage.txt
+        (pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=$package_directory $package_directory/test/ | tee pytest-coverage.txt; test ${PIPESTATUS[0]} -eq 0)
 
       #run: python -m unittest discover -s tests -p 'test_*.py'
       env:
