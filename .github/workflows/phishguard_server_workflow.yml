@@ -57,13 +57,13 @@ jobs:
         MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }} 
 
     - name: Update README with Coverage Report
-          run: |
-            # Append coverage report to README
-            echo '## Test Coverage Report' >> README.md
-            cat coverage.txt >> README.md
-            # Commit and push changes
-            git config --local user.email "action@github.com"
-            git config --local user.name "GitHub Action"
-            git add README.md
-            git commit -m "Update README with coverage report"
-            git push
+      run: |
+        # Append coverage report to README
+        echo '## Test Coverage Report' >> README.md
+        cat coverage.txt >> README.md
+        # Commit and push changes
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add README.md
+        git commit -m "Update README with coverage report"
+        git push
