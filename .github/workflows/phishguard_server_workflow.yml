@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 env:
-  package_directory: app
+  package_directory: PhishGuard
   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
   MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
   MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
@@ -47,7 +47,7 @@ jobs:
         cd ./$repo_name
         # pytest
         pip install pytest-cov
-        (pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=$package_directory $package_directory/tests/ | tee pytest-coverage.txt; test ${PIPESTATUS[0]} -eq 0)
+        (pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=$package_directory $package_directory/test/ | tee pytest-coverage.txt; test ${PIPESTATUS[0]} -eq 0)
 
       #run: python -m unittest discover -s tests -p 'test_*.py'
       env:
