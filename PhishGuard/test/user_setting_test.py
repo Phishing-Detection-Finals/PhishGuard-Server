@@ -44,6 +44,11 @@ def test_update_password(client: FlaskClient):
                                                        new_password=TestConstants.INVALID_PASSWORD_1)
     assert response.status_code == HTTPStatus.BAD_REQUEST
 
+    # trying to update to weak password
+    response = UserTestUtils.update_test_user_password(client=client, jwt_access_token=access_token,
+                                                       new_password=TestConstants.WEAK_PASSWORD_1)
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+
     # trying to update to current password
     response = UserTestUtils.update_test_user_password(client=client, jwt_access_token=access_token,
                                                        new_password=test_user.get("password"))

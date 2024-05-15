@@ -63,6 +63,8 @@ class TestConstants():
     INVALID_PASSWORD_5 = "Abcdefg!"  # no digits in password
     INVALID_PASSWORD_6 = "Abcdefg1"  # no special chars in password
 
+    WEAK_PASSWORD_1 = "abcdefghi"
+
     INVALID_USERNAME_1 = "testt"  # less than min chars for username
 
     INVALID_EMAIL_LIST = [INVALID_EMAIL_1, INVALID_EMAIL_2, INVALID_EMAIL_3, INVALID_EMAIL_4, INVALID_EMAIL_5,
