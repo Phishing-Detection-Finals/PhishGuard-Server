@@ -7,7 +7,6 @@ from .constants import Constants
 # from profanity_check import predict  # for checking offensive username
 
 
-# TODO add tests for validation
 class Validator():
     @staticmethod
     def validate_user_json(user_json: dict) -> None:
@@ -28,8 +27,8 @@ class Validator():
 
     @staticmethod
     def validate_username(username: str) -> None:
-        if not username or username == "":
-            raise UsernameNotValidException()
+        if not Constants.USERNAME_MIN_CHARS <= len(username) <= Constants.USERNAME_MAX_CHARS:
+            raise UsernameNotValidException(message=Constants.MIN_MAX_CHARS_USERNAME_EXCEPTION_MESSAGE)
 
         # is_offensive = predict([username])  # returns an array 0 - good, 1 - bad
         # if is_offensive[0] == 1:

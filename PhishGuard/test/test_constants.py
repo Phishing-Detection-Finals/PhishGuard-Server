@@ -9,8 +9,8 @@ class TestConstants():
     UPDATE_EMAIL_ROUTE = '/setting/user/email'
     UPDATE_USERNAME_ROUTE = '/setting/user/username'
 
-    TEST_USERNAME_1 = "test1"
-    TEST_USERNAME_2 = "test2"
+    TEST_USERNAME_1 = "testt1"
+    TEST_USERNAME_2 = "testt2"
     TEST_EMAIL_1 = "test1@gmail.com"
     TEST_EMAIL_2 = "test2@gmail.com"
     TEST_STRONG_PASSWORD_1 = "Password1!"
@@ -63,7 +63,7 @@ class TestConstants():
     INVALID_PASSWORD_5 = "Abcdefg!"  # no digits in password
     INVALID_PASSWORD_6 = "Abcdefg1"  # no special chars in password
 
-    INVALID_USERNAME_1 = ""
+    INVALID_USERNAME_1 = "testt"  # less than min chars for username
 
     INVALID_EMAIL_LIST = [INVALID_EMAIL_1, INVALID_EMAIL_2, INVALID_EMAIL_3, INVALID_EMAIL_4, INVALID_EMAIL_5,
                           INVALID_EMAIL_6, INVALID_EMAIL_7, INVALID_EMAIL_8, INVALID_EMAIL_9, INVALID_EMAIL_10,

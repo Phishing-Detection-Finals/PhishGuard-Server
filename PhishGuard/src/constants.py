@@ -38,3 +38,11 @@ class Constants:
 
     LOGIN_REQUIRED_FIELDS = ["email", "password"]
     SIGNUP_REQUIRED_FIELDS = ["email", "password", "username"]
+
+    USERNAME_MIN_CHARS = 6
+    USERNAME_MAX_CHARS = 20
+
+    MIN_MAX_CHARS_USERNAME_EXCEPTION_MESSAGE = (
+        f"Username must be between {USERNAME_MIN_CHARS} and "
+        f"{USERNAME_MAX_CHARS} characters long."
+    )

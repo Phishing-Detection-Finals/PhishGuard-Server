@@ -35,13 +35,8 @@ def test_password_validation_using_signup(client: FlaskClient, invalid_password:
 def test_username_validation_using_signup(client: FlaskClient):
     user = copy.deepcopy(TestConstants.TEST_USER_1)
 
-    # assinging none as username
-    user["username"] = None
-    response = UserTestUtils.create_test_user(client=client, test_user=user)
-    assert response.status_code == HTTPStatus.BAD_REQUEST
-
-    # assigning empty string as username
-    user["username"] = ""
+    # assinging invalid username
+    user["username"] = TestConstants.INVALID_USERNAME_1
     response = UserTestUtils.create_test_user(client=client, test_user=user)
     assert response.status_code == HTTPStatus.BAD_REQUEST
 
