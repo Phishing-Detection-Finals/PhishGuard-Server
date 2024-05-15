@@ -31,7 +31,7 @@ class UserService():
 
     def login_user(self, user_json: dict) -> dict:
         # validate user email and assigning normalized email
-        Validator.validate_user_json(user_json=user_json)
+        Validator.validate_user_json(user_json=user_json, is_username_included=False)
         user = UserCRUD.get_user_by_email(email=user_json.get("email"))
         if user.check_password_hash(password=user_json.get("password")):
             return UsersUtils.generate_jwt_tokens_and_login_message(user=user)
@@ -63,7 +63,7 @@ class UserService():
             raise UserAlreadyExistsException(user_email=new_email)
 
         UserCRUD.update_email(user_email=identity, new_email=new_email)
-        return {"message": Constants.SUCCESSFULLY_UPDATED_EMAIL_MESSAGE.format(email=new_email)}
+        return UsersUtils.generate_jwt_tokens_and_update_email_message(new_email=new_email)
 
     def update_password(identity: str, new_password: str) -> dict:
         Validator.validate_password_strength(password=new_password)

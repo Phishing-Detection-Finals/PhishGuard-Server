@@ -21,6 +21,13 @@ class UsersUtils():
                                                        refresh_token=refresh_token)
 
     @staticmethod
+    def generate_jwt_tokens_and_update_email_message(new_email: str) -> dict:
+        access_token, refresh_token = UsersUtils.generate_jwt_access_and_refresh_tokens(user_email=new_email)
+        formatted_message = Constants.SUCCESSFULLY_UPDATED_EMAIL_MESSAGE.format(email=new_email)
+        return UsersUtils.generate_message_with_tokens(message=formatted_message, access_token=access_token,
+                                                       refresh_token=refresh_token)
+
+    @staticmethod
     def generate_jwt_access_and_refresh_tokens(user_email: str) -> tuple[str, str]:
         access_token = UsersUtils.generate_jwt_access_token(user_email=user_email)
         refresh_token = UsersUtils.generate_jwt_refresh_token(user_email=user_email)
