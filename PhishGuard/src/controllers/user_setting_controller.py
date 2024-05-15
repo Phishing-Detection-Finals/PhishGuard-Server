@@ -20,11 +20,11 @@ class UserSettingController:
         self.register_routes()
 
     def register_routes(self):
-        self.blueprint.route('/user', methods=['DELETE'])(self.delete_user)
+        self.blueprint.route('', methods=['DELETE'])(self.delete_user)
         self.blueprint.route('/username', methods=['PUT'])(self.update_username)
         self.blueprint.route('/email', methods=['PUT'])(self.update_email)
         self.blueprint.route('/password', methods=['PUT'])(self.update_password)
-        self.blueprint.route('/user', methods=['GET'])(self.get_user_details)
+        self.blueprint.route('', methods=['GET'])(self.get_user_details)
 
     @jwt_required()
     def delete_user(self):

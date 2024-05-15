@@ -32,6 +32,6 @@ class Constants:
 
     AUTHENTICATION_ROUTE_PREFIX = "/auth"
 
-    USER_SETTING_ROUTE_PREFIX = "/setting"
+    USER_SETTING_ROUTE_PREFIX = "/setting/user"
 
     SPECIAL_CHARACTERS = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', ',', '.', '?', '"', ':', '{', '}', '|', '<', '>']
