@@ -19,42 +19,31 @@ class UserCRUD():
 
     @staticmethod
     def is_user_with_email_exists(email: str) -> bool:
-        user = User.objects(email=email).first()
-        if user:
+        try:
+            UserCRUD.get_user_by_email(email=email)
             return True
-        return False
+        except UserNotExistsException:
+            return False
 
     @staticmethod
     def delete_user(user_email: str) -> None:
-        user = User.objects(email=user_email).first()
-        if user:
-            user.delete()
-            return
-        raise UserNotExistsException(user_email=user_email)
+        user = UserCRUD.get_user_by_email(email=user_email)
+        user.delete()
 
     @staticmethod
     def update_username(user_email: str, new_username: str) -> None:
-        user = User.objects(email=user_email).first()
-        if user:
-            user.username = new_username
-            user.save()
-            return
-        raise UserNotExistsException(user_email=user_email)
+        user = UserCRUD.get_user_by_email(email=user_email)
+        user.username = new_username
+        user.save()
 
     @staticmethod
     def update_email(user_email: str, new_email: str) -> None:
-        user = User.objects(email=user_email).first()
-        if user:
-            user.email = new_email
-            user.save()
-            return
-        raise UserNotExistsException(user_email=user_email)
+        user = UserCRUD.get_user_by_email(email=user_email)
+        user.email = new_email
+        user.save()
 
     @staticmethod
     def update_password(user_email: str, new_password: str) -> None:
-        user = User.objects(email=user_email).first()
-        if user:
-            User.set_hash_password(self=user, password=new_password)
-            user.save()
-            return
-        raise UserNotExistsException(user_email=user_email)
+        user = UserCRUD.get_user_by_email(email=user_email)
+        User.set_hash_password(self=user, password=new_password)
+        user.save()
