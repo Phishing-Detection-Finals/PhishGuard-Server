@@ -24,6 +24,10 @@ def test_delete_user(client: FlaskClient):
     response = UserTestUtils.delete_test_user(client=client, jwt_access_token=access_token)
     assert response.status_code == HTTPStatus.OK
 
+    # trying to delete the deleted test user
+    response = UserTestUtils.delete_test_user(client=client, jwt_access_token=access_token)
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
     # trying to get deleted user
     response = UserTestUtils.get_test_user_details(client=client, jwt_access_token=access_token)
     assert response.status_code == HTTPStatus.NOT_FOUND
@@ -63,6 +67,11 @@ def test_update_password(client: FlaskClient):
     # deleting user
     response = UserTestUtils.delete_test_user(client=client, jwt_access_token=access_token)
     assert response.status_code == HTTPStatus.OK
+
+    # trying to update deleted user's password
+    response = UserTestUtils.update_test_user_password(client=client, jwt_access_token=access_token,
+                                                       new_password=TestConstants.TEST_STRONG_PASSWORD_1)
+    assert response.status_code == HTTPStatus.NOT_FOUND
 
 
 def test_update_email(client: FlaskClient):
@@ -121,6 +130,11 @@ def test_update_email(client: FlaskClient):
     response = UserTestUtils.delete_test_user(client=client, jwt_access_token=access_token)
     assert response.status_code == HTTPStatus.OK
 
+    # trying to update deleted user's email
+    response = UserTestUtils.update_test_user_email(client=client, jwt_access_token=access_token,
+                                                    new_email=TestConstants.TEST_EMAIL_2)
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
 
 def test_update_username(client: FlaskClient):
     test_user = TestConstants.TEST_USER_1
@@ -152,6 +166,10 @@ def test_update_username(client: FlaskClient):
     # deleting user
     response = UserTestUtils.delete_test_user(client=client, jwt_access_token=access_token)
     assert response.status_code == HTTPStatus.OK
+
+    # trying to update deleted user's username
+    response = UserTestUtils.update_test_user_username(client=client, jwt_access_token=access_token, new_username=new_username)
+    assert response.status_code == HTTPStatus.NOT_FOUND
 
 
 def test_get_user_details(client: FlaskClient):

@@ -44,3 +44,11 @@ def test_username_validation_using_signup(client: FlaskClient):
     user["username"] = ""
     response = UserTestUtils.create_test_user(client=client, test_user=user)
     assert response.status_code == HTTPStatus.BAD_REQUEST
+
+
+def test_email_validation_using_login(client: FlaskClient):
+    # assigning invalid email to the user
+    user = copy.deepcopy(TestConstants.TEST_USER_1)
+    user["email"] = TestConstants.INVALID_EMAIL_1
+    response = UserTestUtils.login_test_user(client=client, test_user=user)
+    assert response.status_code == HTTPStatus.BAD_REQUEST

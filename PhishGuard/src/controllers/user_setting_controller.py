@@ -102,6 +102,7 @@ class UserSettingController:
         except UsernameNotValidException as e:
             return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
 
+        # TODO - make a decision, might be deleted
         except OffensiveUsernameException as e:
             return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
 
