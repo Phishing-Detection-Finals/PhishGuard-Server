@@ -5,9 +5,9 @@ class TestConstants():
 
     DELETE_USER_ROUTE = '/setting/user'
     GET_USER_ROUTE = '/setting/user'
-    UPDATE_PASSWORD_ROUTE = '/setting/password'
-    UPDATE_EMAIL_ROUTE = '/setting/email'
-    UPDATE_USERNAME_ROUTE = '/setting/username'
+    UPDATE_PASSWORD_ROUTE = '/setting/user/password'
+    UPDATE_EMAIL_ROUTE = '/setting/user/email'
+    UPDATE_USERNAME_ROUTE = '/setting/user/username'
 
     TEST_USERNAME_1 = "test1"
     TEST_USERNAME_2 = "test2"
