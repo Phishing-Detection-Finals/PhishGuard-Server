@@ -9,7 +9,7 @@ from .constants import Constants
 # TODO add tests for validation
 class Validator():
     @staticmethod
-    def validate_user_json(user_json: dict):
+    def validate_user_json(user_json: dict) -> None:
         user_json["email"] = Validator.validate_email_to_normalized(email=user_json.get("email"))
         Validator.validate_password_strength(password=user_json.get("password"))
         Validator.validate_username(username=user_json.get("username"))

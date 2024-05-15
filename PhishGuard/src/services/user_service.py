@@ -13,8 +13,7 @@ class UserService():
     def __init__(self) -> None:
         pass
 
-    # TODO implement validation of all of the data
-    def get_user_details_by_email(self, email: str):
+    def get_user_details_by_email(self, email: str) -> dict:
         user_email = Validator.validate_email_to_normalized(email=email)
         return UserCRUD.get_user_by_email(email=user_email).to_dict()
 

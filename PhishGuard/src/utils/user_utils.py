@@ -42,7 +42,7 @@ class UsersUtils():
         }
 
     @staticmethod
-    def generate_tokens_dict(access_token: str = None, refresh_token: str = None):
+    def generate_tokens_dict(access_token: str = None, refresh_token: str = None) -> dict:
         tokens = {
             key: value for key, value in {
                 "access_token": access_token,

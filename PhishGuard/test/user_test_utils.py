@@ -31,12 +31,12 @@ class UserTestUtils():
                           headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
 
     @staticmethod
-    def update_test_user_email(client: FlaskClient, jwt_access_token: str, new_email: str):
+    def update_test_user_email(client: FlaskClient, jwt_access_token: str, new_email: str) -> TestResponse:
         return client.put(TestConstants.UPDATE_EMAIL_ROUTE, json={"email": new_email},
                           headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
 
     @staticmethod
-    def update_test_user_username(client: FlaskClient, jwt_access_token: str, new_username: str):
+    def update_test_user_username(client: FlaskClient, jwt_access_token: str, new_username: str) -> TestResponse:
         return client.put(TestConstants.UPDATE_USERNAME_ROUTE, json={"username": new_username},
                           headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_access_token))
 
@@ -72,21 +72,3 @@ class UserTestUtils():
     @staticmethod
     def generate_authorization_header(jwt_token: str) -> dict:
         return {"Authorization": TestConstants.AUTH_HEADER_TEMPLATE.format(jwt_token=jwt_token)}
-
-    # def dict_to_user(user_dict: dict) -> User:
-
-    #     # Extract user attributes from the dictionary
-    #     _id = user_dict.get('_id')
-    #     username = user_dict.get('username')
-    #     email = user_dict.get('email')
-    #     password_hash = user_dict.get('password_hash')
-
-    #     # Create a User instance with the extracted attributes
-    #     user = User(
-    #         _id=_id,
-    #         username=username,
-    #         email=email,
-    #         password_hash=password_hash
-    #     )
-
-    #     return user
