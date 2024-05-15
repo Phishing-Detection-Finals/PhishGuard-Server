@@ -2,6 +2,7 @@ from email_validator import validate_email
 from .exceptions.password_strength_exception import PasswordStrengthException
 # from .exceptions.offensive_username_exception import OffensiveUsernameException
 from .exceptions.username_not_valid_exception import UsernameNotValidException
+from .exceptions.missing_required_fields_exception import MissingRequiredFieldsException
 from .constants import Constants
 # from profanity_check import predict  # for checking offensive username
 
@@ -13,6 +14,12 @@ class Validator():
         user_json["email"] = Validator.validate_email_to_normalized(email=user_json.get("email"))
         Validator.validate_password_strength(password=user_json.get("password"))
         Validator.validate_username(username=user_json.get("username"))
+
+    @staticmethod
+    def validate_required_fields(data: dict, required_fields: list[str]) -> None:
+        missing_fields = [field for field in required_fields if field not in data or data[field] is None]
+        if missing_fields:
+            raise MissingRequiredFieldsException(missing_fields=missing_fields)
 
     @staticmethod
     def validate_email_to_normalized(email: str) -> str:

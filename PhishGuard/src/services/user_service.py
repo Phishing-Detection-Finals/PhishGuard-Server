@@ -18,13 +18,14 @@ class UserService():
         return UserCRUD.get_user_by_email(email=user_email).to_dict()
 
     def signup_user(self, user_json: dict) -> dict:
+        user_email = user_json.get("email")
+        # if user exists, you cannot create a new one with the same email
+        if (UserCRUD.is_user_with_email_exists(email=user_email)):
+            raise UserAlreadyExistsException(user_email=user_email)
+
         # validate user email and assigning normalized email
         Validator.validate_user_json(user_json=user_json)
         user = UsersUtils.json_to_user(user_json=user_json)
-
-        # if user exists, you cannot create a new one with the same email
-        if (UserCRUD.is_user_with_email_exists(email=user.email)):
-            raise UserAlreadyExistsException(user_email=user.email)
 
         return UserCRUD.create_user(user=user)
 

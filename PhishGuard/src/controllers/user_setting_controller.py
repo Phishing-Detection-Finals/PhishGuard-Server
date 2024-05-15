@@ -7,9 +7,11 @@ from ..exceptions.user_already_exists_exception import UserAlreadyExistsExceptio
 from ..exceptions.password_strength_exception import PasswordStrengthException
 from ..exceptions.previous_user_data_exception import PreviousUserDataException
 from ..exceptions.user_not_exists_exception import UserNotExistsException
-from ..exceptions.offensive_username_exception import OffensiveUsernameException
+# from ..exceptions.offensive_username_exception import OffensiveUsernameException  # TODO decide later if we will use it
 from ..exceptions.username_not_valid_exception import UsernameNotValidException
+from ..exceptions.missing_required_fields_exception import MissingRequiredFieldsException
 from email_validator import EmailNotValidError
+from ..validator import Validator
 
 
 class UserSettingController:
@@ -53,9 +55,14 @@ class UserSettingController:
     @jwt_required()
     def update_password(self):
         try:
+            Validator.validate_required_fields(data=request.json, required_fields=["password"])
             payload_data = request.get_json()
             return jsonify(UserService.update_password(identity=get_jwt_identity(),
                                                        new_password=payload_data.get("password"))), HTTPStatus.OK
+
+        except MissingRequiredFieldsException as e:
+            return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
+
         except PreviousUserDataException as e:
             return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
 
@@ -71,9 +78,13 @@ class UserSettingController:
     @jwt_required()
     def update_email(self):
         try:
+            Validator.validate_required_fields(data=request.json, required_fields=["email"])
             payload_data = request.get_json()
             return jsonify(UserService.update_email(identity=get_jwt_identity(),
                                                     new_email=payload_data.get("email")))
+
+        except MissingRequiredFieldsException as e:
+            return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
 
         except UserAlreadyExistsException as e:
             return jsonify({"error": str(e)}), HTTPStatus.CONFLICT
@@ -93,9 +104,14 @@ class UserSettingController:
     @jwt_required()
     def update_username(self):
         try:
+            Validator.validate_required_fields(data=request.json, required_fields=["username"])
             payload_data = request.get_json()
             return jsonify(UserService().update_username(identity=get_jwt_identity(),
                                                          new_username=payload_data.get("username"))), HTTPStatus.OK
+
+        except MissingRequiredFieldsException as e:
+            return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
+
         except UserNotExistsException as e:
             return jsonify({"error": str(e)}), HTTPStatus.NOT_FOUND
 
@@ -103,8 +119,8 @@ class UserSettingController:
             return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
 
         # TODO - make a decision, might be deleted
-        except OffensiveUsernameException as e:
-            return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
+        # except OffensiveUsernameException as e:
+        #     return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
 
         except PreviousUserDataException as e:
             return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST

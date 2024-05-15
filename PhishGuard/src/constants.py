@@ -35,3 +35,6 @@ class Constants:
     USER_SETTING_ROUTE_PREFIX = "/setting/user"
 
     SPECIAL_CHARACTERS = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', ',', '.', '?', '"', ':', '{', '}', '|', '<', '>']
+
+    LOGIN_REQUIRED_FIELDS = ["email", "password"]
+    SIGNUP_REQUIRED_FIELDS = ["email", "password", "username"]
