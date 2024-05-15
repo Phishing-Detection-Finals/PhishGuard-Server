@@ -29,6 +29,16 @@ class TestConstants():
         "password": TEST_STRONG_PASSWORD_2
     }
 
+    TEST_INVALID_USER_INPUT_NO_DATA = {
+
+    }
+
+    TEST_INVALID_USER_INPUT_NONE_DATA = {
+        "username": None,
+        "email": None,
+        "password": None
+    }
+
     AUTH_HEADER_TEMPLATE = "Bearer {jwt_token}"
 
     # Constants for invalid email test cases

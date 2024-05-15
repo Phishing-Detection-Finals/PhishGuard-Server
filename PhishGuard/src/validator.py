@@ -17,7 +17,7 @@ class Validator():
 
     @staticmethod
     def validate_required_fields(data: dict, required_fields: list[str]) -> None:
-        missing_fields = [field for field in required_fields if field not in data or data[field] is None]
+        missing_fields = [field for field in required_fields if field not in data or not data[field]]
         if missing_fields:
             raise MissingRequiredFieldsException(missing_fields=missing_fields)
 
