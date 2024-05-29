@@ -13,7 +13,11 @@ class ExceptionsHandler:
                 try:
                     return func(*args, **kwargs)
                 except tuple(exception_registry.keys()) as e:
-                    return jsonify({"error": str(e)}), exception_registry[type(e)]
+                    for exc_type in exception_registry.keys():
+                        if isinstance(e, exc_type):
+                            # handles subclasses exceptions aswell
+                            return jsonify({"error": str(e)}), exception_registry[exc_type]
+
                 except Exception as e:
                     return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
             return wrapper
