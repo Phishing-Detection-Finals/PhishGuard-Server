@@ -122,7 +122,9 @@ python -m PhishGuard.__init__
    - **Authorization Header:** JWT access token in the format `Bearer <access_token>`
    - **Request Body:**
      - `email`: New email (string)
-   - **Response:** Success message (string)
+   - **Response:**
+      - access_token: New JWT access token for the authenticated user (string)
+      - refresh_token: New JWT refresh token for the authenticated user (string)
 
 4. Update Password
    - **Description:** Endpoint to update user's password.
