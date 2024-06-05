@@ -56,3 +56,8 @@ class Validator():
         # Check if password contains at least one special character
         if not any(char in Constants.SPECIAL_CHARACTERS for char in password):
             raise PasswordStrengthException("Password must contain at least one special character.")
+
+    @staticmethod
+    def validate_url(url: str) -> None:
+        # TODO implemet url validation
+        pass

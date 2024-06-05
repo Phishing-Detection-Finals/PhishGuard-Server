@@ -34,6 +34,8 @@ class Constants:
 
     USER_SETTING_ROUTE_PREFIX = "/setting/user"
 
+    PHISH_GUARD_ROUTE_PREFIX = "/phish"
+
     SPECIAL_CHARACTERS = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', ',', '.', '?', '"', ':', '{', '}', '|', '<', '>']
 
     LOGIN_REQUIRED_FIELDS = ["email", "password"]

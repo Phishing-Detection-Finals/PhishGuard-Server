@@ -1,4 +1,6 @@
 from flask import Flask
+
+from PhishGuard.src.controllers.phish_guard_controller import PhishGuardController
 from .src.controllers.authentication_controller import AuthenticationController
 from .src.controllers.user_setting_controller import UserSettingController
 from dotenv import load_dotenv
@@ -65,6 +67,7 @@ def register_test_request_handlers(app: Flask):
 def connect_blueprints(app: Flask):
     app.register_blueprint(AuthenticationController().as_blueprint())
     app.register_blueprint(UserSettingController().as_blueprint())
+    app.register_blueprint(PhishGuardController().as_blueprint())
 
 
 if __name__ == '__main__':
