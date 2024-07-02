@@ -40,6 +40,7 @@ class Constants:
 
     LOGIN_REQUIRED_FIELDS = ["email", "password"]
     SIGNUP_REQUIRED_FIELDS = ["email", "password", "username"]
+    PHISH_CHECK_BY_URL_FIELDS = ["url"]
 
     USERNAME_MIN_CHARS = 6
     USERNAME_MAX_CHARS = 20

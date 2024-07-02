@@ -3,8 +3,10 @@ from .exceptions.password_strength_exception import PasswordStrengthException
 # from .exceptions.offensive_username_exception import OffensiveUsernameException
 from .exceptions.username_not_valid_exception import UsernameNotValidException
 from .exceptions.missing_required_fields_exception import MissingRequiredFieldsException
+from .exceptions.url_not_valid_exception import UrlNotValidException
 from .constants import Constants
 # from profanity_check import predict  # for checking offensive username
+import validators
 
 
 class Validator():
@@ -59,5 +61,5 @@ class Validator():
 
     @staticmethod
     def validate_url(url: str) -> None:
-        # TODO implemet url validation
-        pass
+        if not validators.url(url):
+            raise UrlNotValidException()

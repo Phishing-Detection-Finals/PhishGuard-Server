@@ -4,3 +4,4 @@ mongoengine
 flask-jwt-extended
 pytest
 email-validator
+validators
