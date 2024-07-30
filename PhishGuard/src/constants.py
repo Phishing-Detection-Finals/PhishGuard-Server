@@ -29,6 +29,7 @@ class Constants:
     MONGODB_DB_TEST_NAME = "TEST-PhishGuard"
 
     USERS_MONGODB_COLLECTION_NAME = "Users"
+    WEBPAGE_MONGODB_COLLECTION_NAME = "Webpages"
 
     AUTHENTICATION_ROUTE_PREFIX = "/auth"
 
@@ -49,3 +50,5 @@ class Constants:
         f"Username must be between {USERNAME_MIN_CHARS} and "
         f"{USERNAME_MAX_CHARS} characters long."
     )
+
+    DESIRED_SIMILARITY_PERCENTAGE = 0.65  # 2/3 of the webpage enough for phishing risk

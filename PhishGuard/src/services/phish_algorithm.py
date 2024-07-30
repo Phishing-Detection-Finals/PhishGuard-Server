@@ -4,8 +4,9 @@ from bs4 import BeautifulSoup
 import requests
 from difflib import SequenceMatcher
 from concurrent.futures import ThreadPoolExecutor
-from ..data.website import Webpage
+from ..data.webpage import Webpage
 from urllib.parse import urlparse
+from ..constants import Constants
 
 
 class PhishAlgorithm:
@@ -14,17 +15,6 @@ class PhishAlgorithm:
         # until algorithm implemented, if url contains 'phish' - it is phishing
         is_phishing = "phish" in url.lower()
         return {"is_phishing": is_phishing}
-
-    # TODO get legitimate sites list from the DB
-    legitimate_sites = [
-        Webpage(
-            "https://facebook.com",
-            "7a8d46bf55a2b547e0658cb1e0c2b6d5cab2ec69fe51f1ca61eb8d895d1070bc",
-            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-            "e0c2bd376fea4045bc3d23cafe10246c018409cbf4a0ad2316efea035f786dc1"
-        )
-    ]
 
     def get_component_hash(self, content):
         return hashlib.sha256(content.encode()).hexdigest()
@@ -50,28 +40,29 @@ class PhishAlgorithm:
         cert = ssl.get_server_certificate((hostname, 443))
         return hashlib.sha256(cert.encode()).hexdigest()  # Hash the certificate for easier comparison
 
-    def compare_site(self, legit_site, components, cert_hash):
+    def compare_site(self, legit_site: Webpage, components, cert_hash):
         total_similarity = 0
         num_components = 3  # We have 3 components: title, header, footer
 
-        total_similarity += self.compare_hashes(components.get("title", ""), legit_site.titleComponentHash)
-        total_similarity += self.compare_hashes(components.get("header", ""), legit_site.headerComponentHash)
-        total_similarity += self.compare_hashes(components.get("footer", ""), legit_site.footerComponentHash)
+        total_similarity += self.compare_hashes(components.get("title", ""), legit_site.title_hash)
+        total_similarity += self.compare_hashes(components.get("header", ""), legit_site.header_hash)
+        total_similarity += self.compare_hashes(components.get("footer", ""), legit_site.footer_hash)
 
         average_similarity = total_similarity / num_components
 
-        if average_similarity >= 0.8 and cert_hash != legit_site.certificateHash:
-            return True  # Potential phishing site
-
+        if average_similarity >= Constants.DESIRED_SIMILARITY_PERCENTAGE:
+            legit_cert_hash = self.get_ssl_cert(legit_site.url)
+            if cert_hash != legit_cert_hash:
+                return True  # Potential phishing site
         return False  # Site is safe
 
-    def is_phishing(self, url):
+    def is_phishing(self, url: str, legitimate_sites: list[Webpage]):
         components = self.get_page_components(url)
         cert_hash = self.get_ssl_cert(url)
         potential_phishing = False
 
         with ThreadPoolExecutor() as executor:
-            futures = [executor.submit(self.compare_site, legit_site, components, cert_hash) for legit_site in self.legitimate_sites]  # noqa501
+            futures = [executor.submit(self.compare_site, legit_site, components, cert_hash) for legit_site in legitimate_sites]  # noqa501
             for future in futures:
                 if future.result():
                     potential_phishing = True
@@ -80,5 +71,5 @@ class PhishAlgorithm:
         return potential_phishing
 
 
-url_to_check = "https://facebook.com"
-print(PhishAlgorithm().is_phishing(url=url_to_check))
+# url_to_check = "https://facebook.com"
+# print(PhishAlgorithm().is_phishing(url=url_to_check))
