@@ -2,6 +2,7 @@ from ..dal.user_crud import UserCRUD
 from ..exceptions.user_already_exists_exception import UserAlreadyExistsException
 from ..exceptions.wrong_password_exception import WrongPasswordException
 from ..exceptions.previous_user_data_exception import PreviousUserDataException
+from ..exceptions.missing_required_fields_exception import MissingRequiredFieldsException
 # from ..exceptions.user_not_exists_exception import UserNotExistsException
 from ..utils.user_utils import UsersUtils
 from ..validator import Validator
@@ -52,7 +53,7 @@ class UserService():
         UserCRUD.update_username(user_email=identity, new_username=new_username)
         return {"message": Constants.SUCCESSFULLY_UPDATED_USERNAME_MESSAGE.format(username=new_username)}
 
-    def update_email(identity: str, new_email: str) -> dict:
+    def update_email(self, identity: str, new_email: str) -> dict:
         # check if the new email equals to current one
         user = UserCRUD.get_user_by_email(email=identity)
         new_email = Validator.validate_email_to_normalized(email=new_email)
@@ -65,10 +66,38 @@ class UserService():
         UserCRUD.update_email(user_email=identity, new_email=new_email)
         return UsersUtils.generate_jwt_tokens_and_update_email_message(new_email=new_email)
 
-    def update_password(identity: str, new_password: str) -> dict:
+    def update_password(self, identity: str, new_password: str) -> dict:
         Validator.validate_password_strength(password=new_password)
         user = UserCRUD.get_user_by_email(email=identity)
         if UsersUtils.is_new_password_equals_to_old_password(user=user, new_password=new_password):
             raise PreviousUserDataException(user_parameter=UserParam.PASSWORD)
         UserCRUD.update_password(user_email=identity, new_password=new_password)
         return {"message": Constants.SUCCESSFULLY_UPDATED_PASSWORD_MESSAGE}
+
+    def update_settings(self, identity: str, updates: dict) -> dict:
+        if not any(key in updates for key in ['username', 'email', 'password']):
+            raise MissingRequiredFieldsException()
+
+        try:
+            original_password_hash, original_email, original_username = UserService().get_original_user_data(identity=identity)
+
+            if 'username' in updates:
+                UserService().update_username(identity=identity, new_username=updates.get("username"))
+
+            if 'password' in updates:
+                UserService().update_password(identity=identity, new_password=updates.get("password"))
+
+            if 'email' in updates:
+                UserService().update_email(identity=identity, new_email=updates.get("email"))
+
+            return {"message": "Successfully updated user settings"}
+
+        except Exception as e:
+            # in case of an exception, revert to the original user
+            UserCRUD.revert_user_to_original(user_email=identity, original_password_hash=original_password_hash,
+                                             original_email=original_email, original_username=original_username)
+            raise e
+
+    def get_original_user_data(self, identity: str) -> tuple[str, str, str]:
+        original_user = UserCRUD.get_user_by_email(email=identity)
+        return original_user.password_hash, original_user.email, original_user.username

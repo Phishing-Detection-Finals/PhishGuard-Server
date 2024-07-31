@@ -27,6 +27,7 @@ class UserSettingController:
         self.blueprint.route('/username', methods=['PUT'])(self.update_username)
         self.blueprint.route('/email', methods=['PUT'])(self.update_email)
         self.blueprint.route('/password', methods=['PUT'])(self.update_password)
+        self.blueprint.route('', methods=['PATCH'])(self.update_user)
         self.blueprint.route('', methods=['GET'])(self.get_user_details)
 
     @jwt_required()
@@ -55,8 +56,8 @@ class UserSettingController:
     def update_password(self):
         Validator.validate_required_fields(data=request.json, required_fields=["password"])
         payload_data = request.get_json()
-        return jsonify(UserService.update_password(identity=get_jwt_identity(),
-                                                   new_password=payload_data.get("password"))), HTTPStatus.OK
+        return jsonify(UserService().update_password(identity=get_jwt_identity(),
+                                                     new_password=payload_data.get("password"))), HTTPStatus.OK
 
     @jwt_required()
     @ExceptionsHandler.handle_exceptions({
@@ -69,8 +70,8 @@ class UserSettingController:
     def update_email(self):
         Validator.validate_required_fields(data=request.json, required_fields=["email"])
         payload_data = request.get_json()
-        return jsonify(UserService.update_email(identity=get_jwt_identity(),
-                                                new_email=payload_data.get("email")))
+        return jsonify(UserService().update_email(identity=get_jwt_identity(),
+                                                  new_email=payload_data.get("email")))
 
     @jwt_required()
     @ExceptionsHandler.handle_exceptions({
@@ -87,6 +88,21 @@ class UserSettingController:
         # TODO - make a decision, might be deleted
         # except OffensiveUsernameException as e:
         #     return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
+
+    @jwt_required()
+    @ExceptionsHandler.handle_exceptions({
+        MissingRequiredFieldsException: HTTPStatus.BAD_REQUEST,
+        UserNotExistsException: HTTPStatus.NOT_FOUND,
+        UsernameNotValidException: HTTPStatus.BAD_REQUEST,
+        PreviousUserDataException: HTTPStatus.BAD_REQUEST,
+        UserAlreadyExistsException: HTTPStatus.CONFLICT,
+        EmailNotValidError: HTTPStatus.BAD_REQUEST,
+        PasswordStrengthException: HTTPStatus.BAD_REQUEST,
+    })
+    def update_user(self):
+        payload_data = request.get_json()
+        return jsonify(UserService().update_settings(identity=get_jwt_identity(),
+                                                     updates=payload_data)), HTTPStatus.OK
 
     def as_blueprint(self):
         return self.blueprint

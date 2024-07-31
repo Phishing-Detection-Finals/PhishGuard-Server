@@ -47,3 +47,12 @@ class UserCRUD():
         user = UserCRUD.get_user_by_email(email=user_email)
         User.set_hash_password(self=user, password=new_password)
         user.save()
+
+    @staticmethod
+    def revert_user_to_original(user_email: str, original_password_hash: str, original_email: str,
+                                original_username: str) -> None:
+        user = UserCRUD.get_user_by_email(email=user_email)
+        user.password_hash = original_password_hash
+        user.email = original_email
+        user.username = original_username
+        user.save()
