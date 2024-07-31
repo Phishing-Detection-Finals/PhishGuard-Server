@@ -141,3 +141,18 @@ python -m PhishGuard.__init__
    - **URL:** `/setting/user`
    - **Authorization Header:** JWT access token in the format `Bearer <access_token>`
    - **Response:** User details (JSON object)
+   - 
+   
+
+6. Update User Settings
+- **Description:** Endpoint to update user settings. You can update username, email, and/or password in a single request.
+- **Method:** PATCH
+- **URL:** `/setting/user`
+- **Authorization Header:** JWT access token in the format `Bearer <access_token>`
+- **Request Body:**
+   - `username`: New username (string, optional),
+   - `email`: New email (string, optional),
+   - `password`: New password (string, optional)
+- **Response:**  Success message (string)
+
+
