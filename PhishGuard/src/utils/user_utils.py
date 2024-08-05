@@ -17,8 +17,10 @@ class UsersUtils():
     def generate_jwt_tokens_and_login_message(user: User) -> dict:
         access_token, refresh_token = UsersUtils.generate_jwt_access_and_refresh_tokens(user_email=user.email)
         formatted_message = Constants.SUCCESSFULLY_LOGIN_MESSAGE.format(user_email=user.email)
-        return UsersUtils.generate_message_with_tokens(message=formatted_message, access_token=access_token,
-                                                       refresh_token=refresh_token)
+        response_dict = UsersUtils.generate_message_with_tokens(message=formatted_message, access_token=access_token,
+                                                                refresh_token=refresh_token)
+        response_dict["user_details"] = user.to_dict()
+        return response_dict
 
     @staticmethod
     def generate_jwt_tokens_and_update_email_message(new_email: str) -> dict:
