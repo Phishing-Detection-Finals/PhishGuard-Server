@@ -156,3 +156,20 @@ python -m PhishGuard.__init__
 - **Response:**  Success message (string)
 
 
+### Phishing check Route
+
+Check if a URL is phishing.
+
+- **Description:** Endpoint to determine whether a URL is phishing.
+- **Method:** GET
+- **URL:** `/phish/by-url`
+- **Authorization Header:** JWT access token in the format `Bearer <access_token>`
+- **Request Body:**
+   - `url`: URL to check (string)
+- **Response:**  
+   -  `RED`: Webpage is identified as phishing
+   -  `YELLOW`: Webpage status is undetermined
+   -  `GREEN`: Webpage is safe
+
+
+
