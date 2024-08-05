@@ -7,7 +7,7 @@ from ..exceptions.missing_required_fields_exception import MissingRequiredFields
 from ..utils.user_utils import UsersUtils
 from ..validator import Validator
 from ..constants import Constants
-from ..user_param_enum import UserParam
+from ..enums.user_param_enum import UserParam
 
 
 class UserService():

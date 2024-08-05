@@ -5,6 +5,7 @@ from ..constants import Constants
 from http import HTTPStatus
 from ..exceptions.user_not_exists_exception import UserNotExistsException
 from ..exceptions.missing_required_fields_exception import MissingRequiredFieldsException
+from ..exceptions.webpage_inaccessible_exception import WebpageInaccessibleException
 from ..exceptions.url_not_valid_exception import UrlNotValidException
 from ..utils.exceptions_handler import ExceptionsHandler
 from ..validator import Validator
@@ -24,7 +25,8 @@ class PhishGuardController:
     @ExceptionsHandler.handle_exceptions({
         MissingRequiredFieldsException: HTTPStatus.BAD_REQUEST,
         UrlNotValidException: HTTPStatus.BAD_REQUEST,
-        UserNotExistsException: HTTPStatus.NOT_FOUND
+        UserNotExistsException: HTTPStatus.NOT_FOUND,
+        WebpageInaccessibleException: HTTPStatus.BAD_REQUEST
     })
     def check_url_for_phishing(self):
         Validator.validate_required_fields(data=request.json, required_fields=Constants.PHISH_CHECK_BY_URL_FIELDS)

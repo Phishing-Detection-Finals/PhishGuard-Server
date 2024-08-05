@@ -1,4 +1,4 @@
-from ..user_param_enum import UserParam
+from ..enums.user_param_enum import UserParam
 
 
 class PreviousUserDataException(Exception):

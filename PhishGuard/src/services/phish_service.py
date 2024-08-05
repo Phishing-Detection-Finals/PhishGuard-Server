@@ -11,8 +11,10 @@ class PhishService():
     def check_phish_by_url(self, url: str) -> dict:
         Validator.validate_url(url=url)
 
-        return PhishAlgorithm().is_phishing(url=url, legitimate_sites=self.get_known_website_list())
+        return {"phish_result": PhishAlgorithm().is_phishing(url=url, legitimate_sites=self.get_known_website_list()).name}
 
     def get_known_website_list(self) -> list[Webpage]:
         Webpages = WebpageCRUD().get_trusted_webpages_list()
+        for w in Webpages:
+            print(w.url)
         return Webpages

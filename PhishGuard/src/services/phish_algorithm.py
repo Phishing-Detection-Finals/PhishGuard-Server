@@ -7,6 +7,8 @@ from concurrent.futures import ThreadPoolExecutor
 from ..data.webpage import Webpage
 from urllib.parse import urlparse
 from ..constants import Constants
+from ..enums.phish_response_enum import PhishResponse
+from ..exceptions.webpage_inaccessible_exception import WebpageInaccessibleException
 
 
 class PhishAlgorithm:
@@ -19,17 +21,23 @@ class PhishAlgorithm:
     def get_component_hash(self, content):
         return hashlib.sha256(content.encode()).hexdigest()
 
-    def get_page_components(self, url):
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        title = soup.title.string if soup.title else ""
-        header = soup.find('header').text if soup.find('header') else ""
-        footer = soup.find('footer').text if soup.find('footer') else ""
-        return {
-            "title": self.get_component_hash(title),
-            "header": self.get_component_hash(header),
-            "footer": self.get_component_hash(footer)
-        }
+    def get_page_components(self, url: str) -> Webpage:
+        try:
+            response = requests.get(url)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            webpage = Webpage()
+            webpage.title_hash = soup.title.string if soup.title else ""
+            webpage.header_hash = soup.find('header').text if soup.find('header') else ""
+            webpage.footer_hash = soup.find('footer').text if soup.find('footer') else ""
+            return webpage
+        except Exception:
+            raise WebpageInaccessibleException(url=url)
+
+    def normalize_url(self, url: str) -> str:
+        parsed_url = urlparse(url)
+        # Remove 'www.' prefix if present
+        netloc = parsed_url.netloc.replace('www.', '') if parsed_url.netloc.startswith('www.') else parsed_url.netloc
+        return parsed_url._replace(netloc=netloc).geturl()
 
     def compare_hashes(self, hash1, hash2):
         return SequenceMatcher(None, hash1, hash2).ratio()
@@ -40,35 +48,44 @@ class PhishAlgorithm:
         cert = ssl.get_server_certificate((hostname, 443))
         return hashlib.sha256(cert.encode()).hexdigest()  # Hash the certificate for easier comparison
 
-    def compare_site(self, legit_site: Webpage, components, cert_hash):
+    def compare_site(self, legit_site: Webpage, checked_webpage: Webpage, cert_hash) -> PhishResponse:
+        normalized_legit_url = self.normalize_url(legit_site.url)
+        normalized_checked_url = self.normalize_url(checked_webpage.url)
+        if normalized_legit_url == normalized_checked_url:
+            return PhishResponse.GREEN
+
         total_similarity = 0
         num_components = 3  # We have 3 components: title, header, footer
 
-        total_similarity += self.compare_hashes(components.get("title", ""), legit_site.title_hash)
-        total_similarity += self.compare_hashes(components.get("header", ""), legit_site.header_hash)
-        total_similarity += self.compare_hashes(components.get("footer", ""), legit_site.footer_hash)
+        total_similarity += self.compare_hashes(checked_webpage.title_hash, legit_site.title_hash)
+        total_similarity += self.compare_hashes(checked_webpage.header_hash, legit_site.header_hash)
+        total_similarity += self.compare_hashes(checked_webpage.footer_hash, legit_site.footer_hash)
 
         average_similarity = total_similarity / num_components
 
         if average_similarity >= Constants.DESIRED_SIMILARITY_PERCENTAGE:
             legit_cert_hash = self.get_ssl_cert(legit_site.url)
             if cert_hash != legit_cert_hash:
-                return True  # Potential phishing site
-        return False  # Site is safe
+                return PhishResponse.RED  # Potential phishing site
+        return PhishResponse.YELLOW  # Site cannot be determined
 
-    def is_phishing(self, url: str, legitimate_sites: list[Webpage]):
-        components = self.get_page_components(url)
+    def is_phishing(self, url: str, legitimate_sites: list[Webpage]) -> PhishResponse:
+        checked_webpage = self.get_page_components(url)
+        checked_webpage.url = url
         cert_hash = self.get_ssl_cert(url)
-        potential_phishing = False
+        found_red = False
 
         with ThreadPoolExecutor() as executor:
-            futures = [executor.submit(self.compare_site, legit_site, components, cert_hash) for legit_site in legitimate_sites]  # noqa501
+            futures = [executor.submit(self.compare_site, legit_site, checked_webpage,
+                                       cert_hash) for legit_site in legitimate_sites]
             for future in futures:
-                if future.result():
-                    potential_phishing = True
-                    break
+                result = future.result()
+                if result == PhishResponse.GREEN:
+                    return PhishResponse.GREEN  # Immediate return if any site is determined to be not phishing
+                elif result == PhishResponse.RED:
+                    found_red = True
 
-        return potential_phishing
+        return PhishResponse.RED if found_red else PhishResponse.YELLOW
 
 
 # url_to_check = "https://facebook.com"
