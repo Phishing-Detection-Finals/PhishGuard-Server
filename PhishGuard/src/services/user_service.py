@@ -35,7 +35,11 @@ class UserService():
         Validator.validate_user_json(user_json=user_json, is_username_included=False)
         user = UserCRUD.get_user_by_email(email=user_json.get("email"))
         if user.check_password_hash(password=user_json.get("password")):
-            return UsersUtils.generate_jwt_tokens_and_login_message(user=user)
+            response_dict = UsersUtils.generate_jwt_tokens_and_login_message(user=user)
+            # Insert user details into the response dict
+            response_dict["user_details"] = user.to_dict()
+            return response_dict
+
         raise WrongPasswordException()
 
     def refresh_user_access(self, identity: str) -> dict:
