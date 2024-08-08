@@ -9,9 +9,7 @@ from urllib.parse import urlparse
 from ..constants import Constants
 from ..enums.phish_response_enum import PhishResponse
 from ..exceptions.webpage_inaccessible_exception import WebpageInaccessibleException
-print("a")
 import logging
-
 
 
 class PhishAlgorithm:
