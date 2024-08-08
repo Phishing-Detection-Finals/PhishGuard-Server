@@ -9,17 +9,20 @@ from ..exceptions.webpage_inaccessible_exception import WebpageInaccessibleExcep
 from ..exceptions.url_not_valid_exception import UrlNotValidException
 from ..utils.exceptions_handler import ExceptionsHandler
 from ..validator import Validator
+import logging
 
 
 class PhishGuardController:
     def __init__(self):
         self.blueprint = Blueprint('phish_guard', __name__, url_prefix=Constants.PHISH_GUARD_ROUTE_PREFIX)
+        logging.debug("Initialized PhishGuardController with Blueprint")
 
         # Register routes
         self.register_routes()
 
     def register_routes(self):
         self.blueprint.route('/by-url', methods=['GET'])(self.check_url_for_phishing)
+        logging.debug("Route registered: /by-url")
 
     @jwt_required()
     @ExceptionsHandler.handle_exceptions({
@@ -29,8 +32,13 @@ class PhishGuardController:
         WebpageInaccessibleException: HTTPStatus.BAD_REQUEST
     })
     def check_url_for_phishing(self):
-        Validator.validate_required_fields(data=request.json, required_fields=Constants.PHISH_CHECK_BY_URL_FIELDS)
-        return jsonify(PhishService().check_phish_by_url(url=request.json.get("url"))), HTTPStatus.OK
+        logging.debug("Phishing check request received")
+        Validator.validate_required_fields(data=request.args, required_fields=Constants.PHISH_CHECK_BY_URL_FIELDS)
+        url = request.args.get("url")
+        logging.debug(f"Checking URL for phishing: {url}")
+        phishing_result = PhishService().check_phish_by_url(url=url)
+        logging.info("Phishing check completed successfully")
+        return jsonify(phishing_result), HTTPStatus.OK
 
     def as_blueprint(self):
         return self.blueprint
