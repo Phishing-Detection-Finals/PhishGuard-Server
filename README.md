@@ -164,8 +164,8 @@ Check if a URL is phishing.
 - **Method:** GET
 - **URL:** `/phish/by-url`
 - **Authorization Header:** JWT access token in the format `Bearer <access_token>`
-- **Request Body:**
-   - `url`: URL to check (string)
+- **URL request arguments:**
+   - `url`: URL to check (string, required)
 - **Response:**  
    -  `RED`: Webpage is identified as phishing
    -  `YELLOW`: Webpage status is undetermined
