@@ -1,5 +1,4 @@
 from ..data.user import User
-# from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
 from ..exceptions.user_not_exists_exception import UserNotExistsException
 import logging
 

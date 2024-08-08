@@ -1,11 +1,9 @@
 from email_validator import validate_email
 from .exceptions.password_strength_exception import PasswordStrengthException
-# from .exceptions.offensive_username_exception import OffensiveUsernameException
 from .exceptions.username_not_valid_exception import UsernameNotValidException
 from .exceptions.missing_required_fields_exception import MissingRequiredFieldsException
 from .exceptions.url_not_valid_exception import UrlNotValidException
 from .constants import Constants
-# from profanity_check import predict  # for checking offensive username
 import validators
 import logging
 
@@ -40,11 +38,6 @@ class Validator:
             raise UsernameNotValidException(message=Constants.MIN_MAX_CHARS_USERNAME_EXCEPTION_MESSAGE)
         else:
             logging.debug(f"Username '{username}' is valid.")
-
-        # is_offensive = predict([username])  # returns an array 0 - good, 1 - bad
-        # if is_offensive[0] == 1:
-        #     logging.warning(f"Username '{username}' is offensive.")
-        #     raise OffensiveUsernameException()
 
     @staticmethod
     def validate_password_strength(password: str) -> None:

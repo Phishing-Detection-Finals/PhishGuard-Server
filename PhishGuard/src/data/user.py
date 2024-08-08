@@ -29,7 +29,7 @@ class User(Document):
         is_valid = check_password_hash(pwhash=self.password_hash, password=password)
         if is_valid:
             logging.info(f"Password hash check successful for user with email: {self.email}")
-        else :
+        else:
             logging.warning(f"Password hash check failed for user with email: {self.email}")
         return is_valid
 

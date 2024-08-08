@@ -13,12 +13,6 @@ import logging
 
 
 class PhishAlgorithm:
-    def test_url_for_phishing(self, url: str) -> dict:
-        # TODO implement phishing test algorithm here
-        # until algorithm implemented, if url contains 'phish' - it is phishing
-        is_phishing = "phish" in url.lower()
-        logging.debug(f"Testing URL: {url} for phishing. Result: {'Phishing' if is_phishing else 'Not Phishing'}")
-        return {"is_phishing": is_phishing}
 
     def get_component_hash(self, content):
         hash_value = hashlib.sha256(content.encode()).hexdigest()
@@ -59,7 +53,7 @@ class PhishAlgorithm:
         cert = ssl.get_server_certificate((hostname, 443))
         cert_hash = hashlib.sha256(cert.encode()).hexdigest()
         logging.debug(f"Retrieved SSL certificate hash for {url}: {cert_hash}")
-        return cert_hash # Hash the certificate for easier comparison
+        return cert_hash  # Hash the certificate for easier comparison
 
     def compare_site(self, legit_site: Webpage, checked_webpage: Webpage, cert_hash) -> PhishResponse:
         normalized_legit_url = self.normalize_url(legit_site.url)
@@ -98,7 +92,7 @@ class PhishAlgorithm:
             for future in futures:
                 result = future.result()
                 if result == PhishResponse.GREEN:
-                    logging.debug(f"Phishing check result: GREEN")
+                    logging.debug("Phishing check result: GREEN")
                     return PhishResponse.GREEN  # Immediate return if any site is determined to be not phishing
                 elif result == PhishResponse.RED:
                     found_red = True

@@ -8,7 +8,6 @@ from ..exceptions.wrong_password_exception import WrongPasswordException
 from ..exceptions.user_not_exists_exception import UserNotExistsException
 from ..exceptions.password_strength_exception import PasswordStrengthException
 from ..exceptions.username_not_valid_exception import UsernameNotValidException
-# from ..exceptions.offensive_username_exception import OffensiveUsernameException  TODO decide later if we will use it
 from ..exceptions.missing_required_fields_exception import MissingRequiredFieldsException
 from ..validator import Validator
 from email_validator import EmailNotValidError
@@ -17,7 +16,6 @@ import logging
 
 
 class AuthenticationController:
-    # TODO  - decide about object_id creation
     def __init__(self):
         self.blueprint = Blueprint('authentication', __name__, url_prefix=Constants.AUTHENTICATION_ROUTE_PREFIX)
         logging.debug("Initialized AuthenticationController with Blueprint")
@@ -59,9 +57,6 @@ class AuthenticationController:
         signup_response = UserService().signup_user(user_json=request.json)
         logging.info("Signup successful for user")
         return jsonify(signup_response), HTTPStatus.CREATED
-        # TODO - make a decision, might be deleted
-        # except OffensiveUsernameException as e:
-        #     return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
 
     @jwt_required(refresh=True)
     def refresh_access_token(self):

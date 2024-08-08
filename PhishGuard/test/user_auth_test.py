@@ -1,7 +1,6 @@
 import pytest
 from PhishGuard.__init__ import create_test_app  # Import the Flask app
 from flask.testing import FlaskClient
-# from PhishGuard.src.db.phishguard_db_connection import PhishGuardDBConnection
 from .user_test_utils import UserTestUtils
 from .test_constants import TestConstants
 from http import HTTPStatus

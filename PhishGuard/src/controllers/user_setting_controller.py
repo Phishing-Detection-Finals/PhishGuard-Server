@@ -7,7 +7,6 @@ from ..exceptions.user_already_exists_exception import UserAlreadyExistsExceptio
 from ..exceptions.password_strength_exception import PasswordStrengthException
 from ..exceptions.previous_user_data_exception import PreviousUserDataException
 from ..exceptions.user_not_exists_exception import UserNotExistsException
-# from ..exceptions.offensive_username_exception import OffensiveUsernameException  # TODO decide later if we will use it
 from ..exceptions.username_not_valid_exception import UsernameNotValidException
 from ..exceptions.missing_required_fields_exception import MissingRequiredFieldsException
 from email_validator import EmailNotValidError
@@ -68,7 +67,7 @@ class UserSettingController:
         logging.debug(f"Received request to update password for user: {user_identity}")
         payload_data = request.get_json()
         user_update_password_response = UserService().update_password(identity=user_identity,
-                                                     new_password=payload_data.get("password"))
+                                                                      new_password=payload_data.get("password"))
         logging.info(f"Password for user {user_identity} successfully updated")
         return jsonify(user_update_password_response), HTTPStatus.OK
 
@@ -86,7 +85,7 @@ class UserSettingController:
         logging.debug(f"Received request to update email for user: {user_identity}")
         payload_data = request.get_json()
         user_update_email_response = UserService().update_email(identity=user_identity,
-                                                  new_email=payload_data.get("email"))
+                                                                new_email=payload_data.get("email"))
         logging.info(f"Email for user {user_identity} successfully updated")
         return jsonify(user_update_email_response)
 
@@ -103,12 +102,9 @@ class UserSettingController:
         logging.debug(f"Received request to update username for user: {user_identity}")
         payload_data = request.get_json()
         user_update_username_response = UserService().update_username(identity=get_jwt_identity(),
-                                                     new_username=payload_data.get("username"))
+                                                                      new_username=payload_data.get("username"))
         logging.info(f"Username for user {user_identity} successfully updated")
         return jsonify(user_update_username_response), HTTPStatus.OK
-        # TODO - make a decision, might be deleted
-        # except OffensiveUsernameException as e:
-        #     return jsonify({"error": str(e)}), HTTPStatus.BAD_REQUEST
 
     @jwt_required()
     @ExceptionsHandler.handle_exceptions({
@@ -125,7 +121,7 @@ class UserSettingController:
         logging.debug(f"Received request to update settings for user: {user_identity}")
         payload_data = request.get_json()
         user_update_response = UserService().update_settings(identity=get_jwt_identity(),
-                                                     updates=payload_data)
+                                                             updates=payload_data)
         logging.info(f"Settings for user {user_identity} successfully updated")
         return jsonify(user_update_response), HTTPStatus.OK
 

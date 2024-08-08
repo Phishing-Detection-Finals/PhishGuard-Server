@@ -66,7 +66,7 @@ class UserService:
         logging.debug(f"User deleted: {message}")
         return message
 
-    def update_username(self, identity: str, new_username: dict) -> dict:
+    def update_username(self, identity: str, new_username: str) -> dict:
         logging.debug(f"Updating username for user with email: {identity} to {new_username}")
         Validator.validate_username(username=new_username)
         user = UserCRUD.get_user_by_email(email=identity)
@@ -116,11 +116,12 @@ class UserService:
         logging.debug(f"Updating settings for user with email: {identity}")
         if not any(key in updates for key in ['username', 'email', 'password']):
             logging.error("No valid fields to update")
-            raise MissingRequiredFieldsException()
+            # TODO update list
+            raise MissingRequiredFieldsException(['username', 'email', 'password'])
 
+        original_password_hash, original_email, original_username = UserService().get_original_user_data(identity=identity)
+        logging.debug("Original user data fetched for rollback")
         try:
-            original_password_hash, original_email, original_username = UserService().get_original_user_data(identity=identity)
-            logging.debug(f"Original user data fetched for rollback")
 
             if 'username' in updates:
                 UserService().update_username(identity=identity, new_username=updates.get("username"))

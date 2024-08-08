@@ -30,7 +30,7 @@ class UsersUtils:
         access_token, refresh_token = UsersUtils.generate_jwt_access_and_refresh_tokens(user_email=new_email)
         formatted_message = Constants.SUCCESSFULLY_UPDATED_EMAIL_MESSAGE.format(email=new_email)
         message_with_tokens = UsersUtils.generate_message_with_tokens(message=formatted_message, access_token=access_token,
-                                                       refresh_token=refresh_token)
+                                                                      refresh_token=refresh_token)
         logging.debug(f"Generated JWT tokens and email update message for new email: {new_email}")
         return message_with_tokens
 
@@ -42,7 +42,7 @@ class UsersUtils:
         return access_token, refresh_token
 
     @staticmethod
-    def generate_jwt_access_token(user_email: str) -> dict:
+    def generate_jwt_access_token(user_email: str) -> str:
         access_token = create_access_token(identity=user_email)
         logging.debug(f"Generated access token for user email: {user_email}")
         return access_token
@@ -79,5 +79,5 @@ class UsersUtils:
         if is_same_password:
             logging.debug("New password is the same as the old password.")
         else:
-                logging.debug("New password is different from the old password.")
+            logging.debug("New password is different from the old password.")
         return is_same_password

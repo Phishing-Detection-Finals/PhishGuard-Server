@@ -1,5 +1,4 @@
 from ..data.webpage import Webpage
-# from ..exceptions.wrong_password_or_email_exception import WrongPasswordsOrEmail
 from ..exceptions.webpages_list_not_loads_exception import WebpagesListNotLoadsException
 import logging
 

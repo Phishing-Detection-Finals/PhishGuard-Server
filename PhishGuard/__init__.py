@@ -7,11 +7,11 @@ from dotenv import load_dotenv
 import os
 from flask_jwt_extended import JWTManager
 from PhishGuard.src.utils.jwt_utils import JWTUtils
+import logging
+from .src.utils.logging_utils import setup_logging
 
 load_dotenv()
 from PhishGuard.src.db.phishguard_db_connection import PhishGuardDBConnection  # noqa 402
-import logging
-from .src.utils.logging_utils import setup_logging
 
 jwt = JWTManager()
 
@@ -26,7 +26,7 @@ def create_app(is_test: bool = False):
     jwt.init_app(app)
     logging.info("JWT Manager initialized with secret key.")
 
-    if (is_test):
+    if is_test:
         register_test_request_handlers(app=app)
         logging.info("Test request handlers registered.")
     else:
@@ -59,7 +59,7 @@ def register_request_handlers(app: Flask):
         logging.info("Connected to the main database.")
 
     @app.teardown_request
-    def teardown_request(exception=None):
+    def teardown_request():
         phishguard_db_connector.disconnect_from_db()
         logging.info("Disconnected from the main database.")
 
@@ -75,7 +75,7 @@ def register_test_request_handlers(app: Flask):
         logging.info("Connected to the test database.")
 
     @app.teardown_request
-    def teardown_request(exception=None):
+    def teardown_request():
         phishguard_db_connector.disconnect_from_db()
         logging.info("Disconnected from the test database.")
 

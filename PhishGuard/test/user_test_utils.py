@@ -1,11 +1,10 @@
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
-# from PhishGuard.src.data.user import User
 from .test_constants import TestConstants
 from http import HTTPStatus
 
 
-class UserTestUtils():
+class UserTestUtils:
 
     @staticmethod
     def create_test_user(client: FlaskClient, test_user: dict) -> TestResponse:
@@ -16,7 +15,7 @@ class UserTestUtils():
         return client.post(TestConstants.LOGIN_USER_ROUTE, json=test_user)
 
     @staticmethod
-    def refresh_tokens_test_user(client: FlaskClient, jwt_refresh_token: dict) -> TestResponse:
+    def refresh_tokens_test_user(client: FlaskClient, jwt_refresh_token: str) -> TestResponse:
         return client.get(TestConstants.REFRESH_USER_ACCESS_TOKEN_ROUTE,
                           headers=UserTestUtils.generate_authorization_header(jwt_token=jwt_refresh_token))
 
