@@ -7,3 +7,6 @@ email-validator
 validators
 requests
 beautifulsoup4
+MinHash
+cryptography
+datasketch
