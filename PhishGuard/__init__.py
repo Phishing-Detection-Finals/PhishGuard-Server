@@ -59,7 +59,7 @@ def register_request_handlers(app: Flask):
         logging.info("Connected to the main database.")
 
     @app.teardown_request
-    def teardown_request():
+    def teardown_request(exception=None):
         phishguard_db_connector.disconnect_from_db()
         logging.info("Disconnected from the main database.")
 
@@ -75,7 +75,7 @@ def register_test_request_handlers(app: Flask):
         logging.info("Connected to the test database.")
 
     @app.teardown_request
-    def teardown_request():
+    def teardown_request(exception=None):
         phishguard_db_connector.disconnect_from_db()
         logging.info("Disconnected from the test database.")
 

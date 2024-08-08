@@ -39,5 +39,5 @@ def setup_logging():
     handler.setFormatter(formatter)
 
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.WARNING)
     logger.addHandler(handler)
