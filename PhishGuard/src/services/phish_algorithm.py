@@ -26,7 +26,7 @@ class PhishAlgorithm:
             soup = BeautifulSoup(response.text, 'html.parser')
             webpage = Webpage()
             webpage.title_hash = self.get_component_hash(soup.title.string if soup.title else "")
-            webpage.body_hash = self.get_component_hash(content=soup.find('body').text)
+            webpage.body_hash = self.get_component_hash(content=soup.find('body').text if soup.find('body') else "")
             webpage.header_hash = self.get_component_hash(soup.find('header').text if soup.find('header') else "")
             webpage.footer_hash = self.get_component_hash(soup.find('footer').text if soup.find('footer') else "")
             logging.debug(f"Extracted page components from URL: {url}")
