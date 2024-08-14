@@ -1,17 +1,17 @@
 from flask import Flask
 
-from PhishGuard.src.controllers.phish_guard_controller import PhishGuardController
-from PhishGuard.src.controllers.authentication_controller import AuthenticationController
-from PhishGuard.src.controllers.user_setting_controller import UserSettingController
+from .src.controllers.phish_guard_controller import PhishGuardController
+from .src.controllers.authentication_controller import AuthenticationController
+from .src.controllers.user_setting_controller import UserSettingController
 from dotenv import load_dotenv
 import os
 from flask_jwt_extended import JWTManager
-from PhishGuard.src.utils.jwt_utils import JWTUtils
+from .src.utils.jwt_utils import JWTUtils
 import logging
 from .src.utils.logging_utils import setup_logging
 
 load_dotenv()
-from PhishGuard.src.db.phishguard_db_connection import PhishGuardDBConnection  # noqa 402
+from .src.db.phishguard_db_connection import PhishGuardDBConnection  # noqa 402
 
 jwt = JWTManager()
 
