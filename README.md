@@ -63,6 +63,44 @@ To run the application, use the following command:
 python -m PhishGuard.__init__
 ```
 
+# Flask Docker Setup
+
+## Build and Run the Docker Image
+
+Follow these steps to create and run the Docker image for the Flask application:
+
+### 1. **Build the Docker Image**
+
+Navigate to the root of your project directory where the `Dockerfile` is located and build the Docker image using the following command:
+
+\`\`\`bash
+docker build -t phish_guard_server .
+\`\`\`
+
+- `phish_guard_server` is the name you are giving to the Docker image. You can choose a different name if desired.
+
+### 2. **Run the Docker Container**
+
+Once the image is built, you can run a container from this image with the following command:
+
+\`\`\`bash
+docker run -p 5000:5000 phish_guard_server
+\`\`\`
+
+- This maps port `5000` on your host to port `5000` in the Docker container, allowing you to access the Flask application at `http://localhost:5000`.
+
+### 3. **Verify the Application**
+
+Open a web browser and navigate to `http://localhost:5000` to see if the Flask application is running correctly.
+
+## Notes
+
+- Ensure you have Docker installed on your machine.
+- Make sure your project directory contains a `requirements.txt` file and a properly configured `Dockerfile`.
+
+If you encounter any issues, double-check your Dockerfile configuration, project structure, and Flask application setup.
+
+
 ## Endpoints
 
 ### Authentication Routes
