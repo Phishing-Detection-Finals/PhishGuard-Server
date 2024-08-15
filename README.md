@@ -73,9 +73,9 @@ Follow these steps to create and run the Docker image for the Flask application:
 
 Navigate to the root of your project directory where the `Dockerfile` is located and build the Docker image using the following command:
 
-\`\`\`bash
+```bash
 docker build -t phish_guard_server .
-\`\`\`
+```
 
 - `phish_guard_server` is the name you are giving to the Docker image. You can choose a different name if desired.
 
@@ -83,9 +83,9 @@ docker build -t phish_guard_server .
 
 Once the image is built, you can run a container from this image with the following command:
 
-\`\`\`bash
+```bash
 docker run -p 5000:5000 phish_guard_server
-\`\`\`
+```
 
 - This maps port `5000` on your host to port `5000` in the Docker container, allowing you to access the Flask application at `http://localhost:5000`.
 
