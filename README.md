@@ -89,9 +89,6 @@ docker run -p 5000:5000 phish_guard_server
 
 - This maps port `5000` on your host to port `5000` in the Docker container, allowing you to access the Flask application at `http://localhost:5000`.
 
-### 3. **Verify the Application**
-
-Open a web browser and navigate to `http://localhost:5000` to see if the Flask application is running correctly.
 
 ## Notes
 
